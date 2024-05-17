@@ -13,7 +13,14 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Login />} />
+          <Route
+            index
+            element={
+              <SidebarWithHeader>
+                <Text>Login</Text>
+              </SidebarWithHeader>
+            }
+          />
           <Route
             path="/Student/Report/ScheduleOfWeek"
             element={<TimetableComponentForStudent />}
