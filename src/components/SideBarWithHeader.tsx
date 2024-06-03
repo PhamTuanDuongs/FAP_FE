@@ -23,6 +23,7 @@ import {
   MenuList,
   Image,
   useColorMode,
+  Spacer,
 } from "@chakra-ui/react";
 import {
   FiMenu,
@@ -30,6 +31,7 @@ import {
   FiCalendar,
   FiUserCheck,
   FiCheckCircle,
+  FiPlusCircle,
 } from "react-icons/fi";
 import { IconType } from "react-icons";
 import { ReactText } from "react";
@@ -56,6 +58,12 @@ const LinkItems: Array<LinkItemProps> = [
     icon: FiUserCheck,
     url: "/Student/Report/Attendance",
   },
+
+  {
+    name: "Create a new Course",
+    icon: FiPlusCircle,
+    url: "/Add/Course",
+  },
 ];
 
 export default function SidebarWithHeader({
@@ -65,28 +73,41 @@ export default function SidebarWithHeader({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
-      <SidebarContent
-        onClose={() => onClose}
-        display={{ base: "none", md: "block" }}
-      />
-      <Drawer
-        autoFocus={false}
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full"
-      >
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
+    <Box minH="100vh" display="flex" flexDirection="column">
+      <Box flex="1">
+        <SidebarContent
+          onClose={() => onClose}
+          display={{ base: "none", md: "block" }}
+        />
+        <Drawer
+          autoFocus={false}
+          isOpen={isOpen}
+          placement="left"
+          onClose={onClose}
+          returnFocusOnClose={false}
+          onOverlayClick={onClose}
+          size="full"
+        >
+          <DrawerContent>
+            <SidebarContent onClose={onClose} />
+          </DrawerContent>
+        </Drawer>
+        <MobileNav onOpen={onOpen} />
+        <Box
+          marginTop="80px"
+          ml={{ base: 0, md: 60 }}
+          p="4"
+          flexGrow="1"
+          position="relative"
+        >
+          {children}
+        </Box>
+      </Box>
+      <Box ml={{ base: 0, md: 60 }} marginBottom="0" alignSelf="flex-start">
+        <Text>
+          {" "}
+          © 2024 <span>™Power by Group 4</span>. All Rights Reserved.
+        </Text>
       </Box>
     </Box>
   );
@@ -99,6 +120,7 @@ interface SidebarProps extends BoxProps {
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
     <Box
+      marginTop="50px"
       transition="3s ease"
       bg={useColorModeValue("white", "gray.900")}
       borderRight="1px"
@@ -106,24 +128,16 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
+      width="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <Box>
-          <Image
-            boxSize="150px"
-            objectFit="fill"
-            src="/images/FPT.svg"
-            alt="Dan Abramov"
-          />
-        </Box>
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
-      </Flex>
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon} link={link.url}>
-          {link.name}
-        </NavItem>
-      ))}
+      <Box marginTop={10}>
+        {LinkItems.map((link) => (
+          <NavItem key={link.name} icon={link.icon} link={link.url}>
+            {link.name}
+          </NavItem>
+        ))}
+      </Box>
     </Box>
   );
 };
@@ -176,14 +190,19 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Flex
+      alignItems="center"
+      gap="2"
+      position="fixed"
+      top="0"
+      right="0"
+      width="100%"
       bg={useColorModeValue("white", "gray.900")}
-      ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 4 }}
       height="20"
-      alignItems="center"
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent={{ base: "space-between", md: "flex-end" }}
+      zIndex={33}
       {...rest}
     >
       <IconButton
@@ -193,7 +212,15 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-
+      <Box>
+        <Image
+          boxSize="150px"
+          objectFit="fill"
+          src="/images/FPT.svg"
+          alt="Dan Abramov"
+        />
+      </Box>
+      <Spacer />
       <HStack spacing={{ base: "0", md: "6" }}>
         <IconButton
           onClick={toggleColorMode}

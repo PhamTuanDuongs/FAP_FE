@@ -4,10 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TimetableComponentForStudent from "./pages/TimeTableForStudent";
 import TakeAttendance from "./pages/TakeAttandance";
 import TimetableComponentForTeacher from "./pages/TimeTableForTeacher";
-import SidebarWithHeader from "./components/SideBarWithHeader";
-import { Text } from "@chakra-ui/react";
-import AttendaceReport from "./pages/AttendanceReport";
 import Login from "./pages/Login";
+import AddNewCourse from "./pages/AddNewCourse";
+import AttendaceReport from "./pages/AttendanceReport";
 function App() {
   return (
     <div>
@@ -23,6 +22,7 @@ function App() {
             element={<TimetableComponentForTeacher />}
           />
           <Route path="/takeAttendance" element={<TakeAttendance />} />
+          <Route path="/Add/Course" element={<AddNewCourse />} />
           <Route
             path="/Student/Report/Attendance"
             element={<AttendaceReport />}
