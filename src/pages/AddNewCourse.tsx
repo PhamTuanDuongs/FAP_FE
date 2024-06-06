@@ -12,6 +12,7 @@ import {
 } from "../utils/functions/csvUtils";
 import { useState } from "react";
 import { Timeslot } from "../types/TimeSlot";
+import { timeslots } from "../utils/functions/slots";
 
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
@@ -33,14 +34,6 @@ const validationSchema = yup.object({
 });
 
 function AddNewCourse() {
-  const slots: Timeslot[] = [
-    { Id: "A24" },
-    { Id: "A36" },
-    { Id: "A42" },
-    { Id: "A35" },
-    { Id: "A25" },
-    { Id: "A62" },
-  ];
   const [subjects, setSubjects] = useState<Timeslot[]>([]);
   const [room, setRoom] = useState<Timeslot[]>([]);
   const [instructor, setInstructor] = useState(null);
@@ -62,7 +55,7 @@ function AddNewCourse() {
       endDate: "",
       subject: "",
       instructor: "",
-      timeSlot: slots[0].Id,
+      timeSlot: timeslots[0].Id,
       room: "",
       file: [],
     },
@@ -202,7 +195,7 @@ function AddNewCourse() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           >
-            {slots.map((slot) => (
+            {timeslots.map((slot) => (
               <option selected value={slot.Id}>
                 {slot.Id}
               </option>
