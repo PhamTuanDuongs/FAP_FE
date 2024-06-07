@@ -78,10 +78,18 @@ function TimetableComponentForStudent() {
     setDaysInAWeek(getCurrentWeekday("ddMM"));
     setWeeksInYear(getAllWeeks(getCurrentYear()));
     setYears(yearArr);
-    const response = Getschedules(1, dateFrom, dateTo);
-    response.then((res: Attendance[]) => setSchedules(res));
   }, []);
 
+  useEffect(() => {
+    const fetchSchedules = async () => {
+      const response = await Getschedules(1, dateFrom, dateTo);
+      setSchedules(response);
+    };
+
+    fetchSchedules();
+  }, [dateFrom, dateTo]);
+
+  // response.then((res: Attendance[]) => setSchedules(res));
   return (
     <SidebarWithHeader>
       <h3>Schedule of Week</h3>

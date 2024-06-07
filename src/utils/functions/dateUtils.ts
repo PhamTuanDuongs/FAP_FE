@@ -3,11 +3,18 @@ import { Timeslot } from "../../types/TimeSlot";
 
 export const formatDate = (inputDate: string) => {
   return new Date(Date.parse(inputDate)).toLocaleDateString("en-US", {
-    month: "2-digit",
     day: "2-digit",
+    month: "2-digit",
     year: "numeric",
   });
 };
+
+function formatDateddMMyyyy(date: Date): string {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear();
+  return `${month}/${day}/${year}`;
+}
 
 export function getAllWeeks(year: number): Array<{
   weekNumber: number;

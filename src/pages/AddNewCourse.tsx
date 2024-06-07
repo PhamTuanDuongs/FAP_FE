@@ -1,6 +1,14 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { Box, Button, Container, Input, Select, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Input,
+  position,
+  Select,
+  Text,
+} from "@chakra-ui/react";
 import SidebarWithHeader from "../components/SideBarWithHeader";
 import { AddNewCourseAPI } from "../services/Course";
 import { Course } from "../types/Course";
@@ -12,7 +20,6 @@ import {
 } from "../utils/functions/csvUtils";
 import { useState } from "react";
 import { Timeslot } from "../types/TimeSlot";
-import { timeslots } from "../utils/functions/slots";
 
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
@@ -34,6 +41,15 @@ const validationSchema = yup.object({
 });
 
 function AddNewCourse() {
+  const slots: Timeslot[] = [
+    { Id: "A24" },
+    { Id: "A36" },
+    { Id: "A42" },
+    { Id: "A35" },
+    { Id: "A25" },
+    { Id: "A62" },
+    { Id: "A46" },
+  ];
   const [subjects, setSubjects] = useState<Timeslot[]>([]);
   const [room, setRoom] = useState<Timeslot[]>([]);
   const [instructor, setInstructor] = useState(null);
@@ -55,12 +71,15 @@ function AddNewCourse() {
       endDate: "",
       subject: "",
       instructor: "",
-      timeSlot: timeslots[0].Id,
+      timeSlot: slots[0].Id,
       room: "",
       file: [],
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      toast.success("s", {
+        position: "bottom-left",
+      });
       try {
         let selectedFile = values.file[0] as File;
         console.log("reading input file:");
@@ -69,13 +88,14 @@ function AddNewCourse() {
         let course: Course = {
           code: values.name,
           subjectId: parseInt(values.subject),
-          startDate: formatDate(values.startDate),
-          endDate: formatDate(values.endDate),
+          startDate: values.startDate,
+          endDate: values.endDate,
           instructorId: parseInt(values.instructor),
           timeSlot: values.timeSlot,
           room: values.room,
           students: courseInStudents,
         };
+        console.log(course);
         const response = AddNewCourseAPI(course);
         response.then((res) => {
           if (res?.statusCode === 200) {
@@ -195,7 +215,7 @@ function AddNewCourse() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           >
-            {timeslots.map((slot) => (
+            {slots.map((slot) => (
               <option selected value={slot.Id}>
                 {slot.Id}
               </option>
@@ -214,10 +234,10 @@ function AddNewCourse() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           >
-            <option selected value={"1"}>
+            <option selected value={"BE123"}>
               BE123
             </option>
-            <option value={"2"}>BE234</option>
+            <option value={"BE124"}>BE234</option>
           </Select>
           <label htmlFor="file">
             Students
