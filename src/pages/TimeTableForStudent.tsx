@@ -1,9 +1,17 @@
-import { Table, TableContainer, Tbody, Thead, Tr } from "@chakra-ui/react";
+import {
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import SidebarWithHeader from "../components/SideBarWithHeader";
 import { useEffect, useState } from "react";
 import { Attendance } from "../types/Attandance";
-import { Getschedules } from "../services/Schedule";
-import { slots } from "../utils/functions/slots";
+import { GetschedulesForStudent } from "../services/Schedule";
+import { Slot, slots } from "../utils/functions/slots";
 import {
   getAllWeeks,
   getCurrentWeek,
@@ -82,7 +90,7 @@ function TimetableComponentForStudent() {
 
   useEffect(() => {
     const fetchSchedules = async () => {
-      const response = await Getschedules(1, dateFrom, dateTo);
+      const response = await GetschedulesForStudent(1, dateFrom, dateTo);
       setSchedules(response);
     };
 
@@ -118,26 +126,28 @@ function TimetableComponentForStudent() {
         ))}
       </select>
       <TableContainer>
-        <Table variant="simple">
+        <Table>
           <Thead>
             <Tr>
-              <th>Slot</th>
+              <Th>Slot</Th>
               {days.map((day: Day) => (
-                <th>
+                <Th>
                   {day.day}-{day.date}
-                </th>
+                </Th>
               ))}
             </Tr>
           </Thead>
           <Tbody>
-            {slots.map((slot: number) => (
-              <tr>
-                <td>{slot}</td>
+            {slots.map((slot: Slot) => (
+              <Tr>
+                <Td>
+                  Slot {slot.id}-{slot.time}
+                </Td>
                 {days.map((value) => (
-                  <td>
+                  <Td>
                     {schedules.map(
                       (schedule) =>
-                        schedule.scheduleDTONav.slot === slot &&
+                        schedule.scheduleDTONav.slot === slot.id &&
                         schedule.scheduleDTONav.date === value.date && (
                           <div>
                             <div>{schedule.scheduleDTONav.instructorCode}</div>
@@ -147,9 +157,9 @@ function TimetableComponentForStudent() {
                           </div>
                         )
                     )}
-                  </td>
+                  </Td>
                 ))}
-              </tr>
+              </Tr>
             ))}
           </Tbody>
         </Table>

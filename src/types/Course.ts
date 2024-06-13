@@ -13,3 +13,14 @@ export interface Course {
   room: string;
   students: Array<StudentsInCourse>;
 }
+
+export interface ListCourses {
+  id: number;
+  code: string;
+  instructor: string;
+  startDate: string;
+  endDate: string;
+  subject: string;
+  room: string;
+  manageSlot: number;
+}

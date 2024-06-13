@@ -20,6 +20,7 @@ export interface Schedule {
   slot: number;
   date: string;
   room: string;
+  status: boolean;
   course: CourseDTO;
 }
 
