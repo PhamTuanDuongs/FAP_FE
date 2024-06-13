@@ -1,10 +1,10 @@
 import { Course } from "../types/Course";
+import { PREFIX_URL } from "./api";
 
-const PREFIX_URL = process.env.REACT_APP_SERVER_API + "/Course";
 export async function AddNewCourseAPI(course: Course) {
   try {
     console.log(PREFIX_URL);
-    const res = await fetch(`${PREFIX_URL + "/Add/course"}`, {
+    const res = await fetch(`${PREFIX_URL + "/Course/Add/course"}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,13 +25,14 @@ export async function AddNewCourseAPI(course: Course) {
 export async function GetCourse() {
   try {
     console.log(PREFIX_URL);
-    const res = await fetch(`${PREFIX_URL + "/get"}`, {
+    const res = await fetch(`${PREFIX_URL + "/Course/GetCourses"}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    return res.json;
+    const data = await res.json();
+    return data;
   } catch (err) {
     throw err;
   }

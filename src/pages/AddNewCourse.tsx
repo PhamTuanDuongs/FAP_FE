@@ -18,8 +18,12 @@ import {
   ConvertToStudentsInCourse,
   ReadFile,
 } from "../utils/functions/csvUtils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Timeslot } from "../types/TimeSlot";
+import { GetAllInstructors } from "../services/Instructor";
+import { Instructor } from "../types/Instructor";
+import { GetAllSubjects } from "../services/Subject";
+import { Subject } from "../types/Attandance";
 
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
@@ -50,20 +54,9 @@ function AddNewCourse() {
     { Id: "A62" },
     { Id: "A46" },
   ];
-  const [subjects, setSubjects] = useState<Timeslot[]>([]);
-  const [room, setRoom] = useState<Timeslot[]>([]);
-  const [instructor, setInstructor] = useState(null);
-  let listSubjects = [
-    { id: 1, name: "" },
-    { id: 2, name: "" },
-    { id: 3, name: "" },
-  ];
-
-  let listinstructor = [
-    { Id: 1, name: "" },
-    { id: 2, name: "" },
-    { id: 3, name: "" },
-  ];
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [rooms, setRoom] = useState<Timeslot[]>([]);
+  const [instructors, setInstructor] = useState<Instructor[]>([]);
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -113,6 +106,25 @@ function AddNewCourse() {
       }
     },
   });
+
+  useEffect(() => {
+    const fetchInstructors = async () => {
+      const response = await GetAllInstructors();
+      if (response.length > 0) {
+        formik.setFieldValue("instructor", response[0].id);
+      }
+      setInstructor(response);
+    };
+    const fetchSubjects = async () => {
+      const response = await GetAllSubjects();
+      if (response.length > 0) {
+        formik.setFieldValue("subject", response[0].id);
+      }
+      setSubjects(response);
+    };
+    fetchInstructors();
+    fetchSubjects();
+  }, []);
 
   return (
     <SidebarWithHeader>
@@ -181,8 +193,9 @@ function AddNewCourse() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           >
-            <option value={"1"}>PRN231</option>
-            <option value={"2"}>PRN231</option>
+            {subjects.map((subject) => (
+              <option value={subject.id}>{subject.code}</option>
+            ))}
           </Select>
           <label htmlFor="instructor">
             Instructor
@@ -197,10 +210,11 @@ function AddNewCourse() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           >
-            <option selected value={"1"}>
-              Chilp
-            </option>
-            <option value={"2"}>Nhungnn</option>
+            {instructors.map((instructor) => (
+              <option selected value={instructor.id}>
+                {instructor.instructorCode}
+              </option>
+            ))}
           </Select>
           <label htmlFor="timeSlot">
             TimeSlot

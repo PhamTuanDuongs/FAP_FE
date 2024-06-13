@@ -7,6 +7,7 @@ import TimetableComponentForTeacher from "./pages/TimeTableForTeacher";
 import Login from "./pages/Login";
 import AddNewCourse from "./pages/AddNewCourse";
 import AttendaceReport from "./pages/AttendanceReport";
+import ViewCourses from "./pages/ViewCourse";
 function App() {
   return (
     <div>
@@ -27,6 +28,7 @@ function App() {
             path="/Student/Report/Attendance"
             element={<AttendaceReport />}
           />
+          <Route path="/Courses" element={<ViewCourses />} />
         </Routes>
       </BrowserRouter>
     </div>

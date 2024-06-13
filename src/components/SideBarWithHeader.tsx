@@ -64,6 +64,12 @@ const LinkItems: Array<LinkItemProps> = [
     icon: FiPlusCircle,
     url: "/Add/Course",
   },
+
+  {
+    name: "View List of Courses",
+    icon: FiPlusCircle,
+    url: "/Courses",
+  },
 ];
 
 export default function SidebarWithHeader({
