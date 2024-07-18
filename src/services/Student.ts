@@ -1,11 +1,11 @@
-import { Subject } from "../types/Subject";
+import { NewStudent } from "../types/NewStudent";
 import { PREFIX_URL } from "./api";
 
-export async function GetAllSubjects() {
+export async function GetAllStudents() {
   try {
     var token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
-    var url = PREFIX_URL + "/Subject/GetAllSubjects";
+    var url = PREFIX_URL + "/Student/GetAllStudents";
     const res = await fetch(url, {
       method: "GET",
       headers: {
@@ -21,13 +21,13 @@ export async function GetAllSubjects() {
   }
 }
 
-export async function AddNewSubjectAPI(subject: Subject) {
+export async function AddNewStudentAPI(subject: NewStudent) {
   try {
     console.log(subject);
 
     var token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
-    var url = PREFIX_URL + "/Subject/AddNewSubject";
+    var url = PREFIX_URL + "/Student/AddNewStudent";
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -48,13 +48,13 @@ export async function AddNewSubjectAPI(subject: Subject) {
   }
 }
 
-export async function UpdateSubjectAPI(id: number, subject: Subject) {
+export async function UpdateStudentAPI(id: number, subject: NewStudent) {
   try {
     console.log(subject);
 
     var token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
-    var url = PREFIX_URL + `/Subject/UpdateSubject/${id}`;
+    var url = PREFIX_URL + `/Student/UpdateStudent/${id}`;
     const res = await fetch(url, {
       method: "PUT",
       headers: {
@@ -75,47 +75,47 @@ export async function UpdateSubjectAPI(id: number, subject: Subject) {
   }
 }
 
-export async function DeleteSubjectAPI(id:number) {
-  try {
-    var token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
-    var url = PREFIX_URL + `/Subject/DeleteSubject/${id}`;
-    const res = await fetch(url, {
-      method: "DELETE",
-      headers: {
-        "content-type": "application/json",
-        authorization: "Bearer " + token,
-      },
-    });
-
-    const result = await res.text();
-
-    return {
-      data: result,
-      statusCode: res.status
+export async function DeleteStudentAPI(id:number) {
+    try {
+      var token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
+      var url = PREFIX_URL + `/Student/DeleteStudent/${id}`;
+      const res = await fetch(url, {
+        method: "DELETE",
+        headers: {
+          "content-type": "application/json",
+          authorization: "Bearer " + token,
+        },
+      });
+  
+      const result = await res.text();
+  
+      return {
+        data: result,
+        statusCode: res.status
+      }
+    } catch (e) {
+      throw e;
     }
-  } catch (e) {
-    throw e;
   }
-}
 
-export async function GetSubjectByIdAPI(id:number) {
-  try {
-    var token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
-    var url = PREFIX_URL + `/Subject/GetSubjectById/${id}`;
-    const res = await fetch(url, {
-      method: "GET",
-      headers: {
-        "content-type": "application/json",
-        authorization: "Bearer " + token,
-      },
-    });
-
-    const result = await res.json();
-
-    return result;
-  } catch (e) {
-    throw e;
+  export async function GetStudentByIdAPI(id:number) {
+    try {
+      var token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
+      var url = PREFIX_URL + `/Student/GetStudentById/${id}`;
+      const res = await fetch(url, {
+        method: "GET",
+        headers: {
+          "content-type": "application/json",
+          authorization: "Bearer " + token,
+        },
+      });
+  
+      const result = await res.json();
+  
+      return result;
+    } catch (e) {
+      throw e;
+    }
   }
-}

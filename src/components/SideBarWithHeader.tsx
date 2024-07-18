@@ -36,6 +36,7 @@ import {
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import TokenStorageService from "../services/TokenStorage";
 
 interface LinkItemProps {
   name: string;
@@ -70,6 +71,25 @@ const LinkItems: Array<LinkItemProps> = [
     icon: FiPlusCircle,
     url: "/Courses",
   },
+
+  {
+    name: "Subjects",
+    icon: FiPlusCircle,
+    url: "/Subjects",
+  }
+  ,
+
+  {
+    name: "Students",
+    icon: FiPlusCircle,
+    url: "/Students",
+  },
+  {
+    name: "Instructors",
+    icon: FiPlusCircle,
+    url: "/Instructors",
+  }
+
 ];
 
 export default function SidebarWithHeader({
@@ -273,7 +293,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem onClick={() => {
+                const tokenStorageService = new TokenStorageService();
+                tokenStorageService.signOut();
+                window.location.reload();
+              }}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>
