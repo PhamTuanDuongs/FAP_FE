@@ -24,7 +24,7 @@ function Login() {
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
       let loginData:LoginDTO = {
-        username: values.username,
+        email: values.username,
         password: values.password
       }
       const response = LoginAPI(loginData);
@@ -44,15 +44,15 @@ function Login() {
             console.log(retrievedUser);
 
             if(retrievedUser.role === "Student"){
-              navigate('/Subjects', { replace: true });
+              navigate('/Student/Report/ScheduleOfWeek', { replace: true });
             }
 
             if(retrievedUser.role === "Teacher"){
-              console.log(retrievedUser.role);
+              navigate('/Teacher/Report/ScheduleOfWeek', { replace: true });
             }
 
             if(retrievedUser.role === "Admin"){
-              console.log(retrievedUser.role);
+              navigate('/Courses', { replace: true });
             }
 
           } else {

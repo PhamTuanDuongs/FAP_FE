@@ -26,40 +26,43 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<Login />} />
-          <Route
-            path="/Student/Report/ScheduleOfWeek"
-            element={<TimetableComponentForStudent />}
-          />
-          <Route
-            path="/Teacher/Report/ScheduleOfWeek"
-            element={<TimetableComponentForTeacher />}
-          />
-          <Route path="/takeAttendance" element={<TakeAttendance />} />
-          <Route path="/Add/Course" element={<AddNewCourse />} />
-          <Route
-            path="/Student/Report/Attendance"
-            element={<AttendaceReport />}
-          />
 
           <Route element={<IsLogin />}>
             <Route element={<IsAuthorized role="Student" />}>
+              <Route
+                path="/Student/Report/Attendance"
+                element={<AttendaceReport />}
+              />
+              <Route
+                path="/Student/Report/ScheduleOfWeek"
+                element={<TimetableComponentForStudent />}
+              />
             </Route>
 
             <Route element={<IsAuthorized role="Admin" />}>
-            <Route path="/Subjects" element={<SubjectList />} />
+              <Route path="/Subjects" element={<SubjectList />} />
               <Route path="/Update/Subject/:id" element={<UpdateSubject />} />
+              <Route path="/Add/Subject" element={<AddNewSubject />} />
+              <Route path="/Courses" element={<ViewCourses />} />
+              <Route path="/Students" element={<ViewStudent />} />
+              <Route path="/Instructors" element={<ViewInstructor />} />
+              <Route path="Add/Instructor" element={<AddNewInstructor />} />
+              <Route path="/Add/Student" element={<AddNewStudent />} />
+              <Route path="/Update/Student/:id" element={<UpdateStudent />} />
+              <Route path="/Update/Instructor/:id" element={<UpdateInstructor />} />
+              <Route path="/Add/Course" element={<AddNewCourse />} />
             </Route>
 
+            <Route element={<IsAuthorized role="Instructor" />}>
+              <Route
+                path="/Teacher/Report/ScheduleOfWeek"
+                element={<TimetableComponentForTeacher />}
+              />
+              <Route path="/takeAttendance" element={<TakeAttendance />} />
+            </Route>
           </Route>
 
-          <Route path="/Add/Subject" element={<AddNewSubject />} />
-          <Route path="/Courses" element={<ViewCourses />} />
-          <Route path="/Students" element={<ViewStudent />} />
-          <Route path="/Instructors" element={<ViewInstructor />} />
-          <Route path="Add/Instructor" element={<AddNewInstructor />} />
-          <Route path="/Add/Student" element={<AddNewStudent />} />
-          <Route path="/Update/Student/:id" element={<UpdateStudent />} />
-          <Route path="/Update/Instructor/:id" element={<UpdateInstructor />} />
+
           <Route path="/Unauthorized" element={<Unauthorized />} />
 
         </Routes>

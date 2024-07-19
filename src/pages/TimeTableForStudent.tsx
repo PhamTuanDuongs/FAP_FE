@@ -99,7 +99,7 @@ function TimetableComponentForStudent() {
 
   // response.then((res: Attendance[]) => setSchedules(res));
   return (
-    <SidebarWithHeader role2="admin">
+    <SidebarWithHeader role2="student">
       <h3>Schedule of Week</h3>
       <label htmlFor="year">Year</label>
       <select

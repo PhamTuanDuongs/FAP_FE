@@ -61,7 +61,7 @@ const LinkItems: Array<LinkItemProps> = [
     name: "Attendance Report",
     icon: FiUserCheck,
     url: "/Student/Report/Attendance",
-    roles: ["admin"]
+    roles: ["instructor"]
   },
 
   {
