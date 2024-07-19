@@ -1,7 +1,7 @@
-import { Course } from "../types/Course";
+import { CourseWithStudent } from "../types/Course";
 import { PREFIX_URL } from "./api";
 
-export async function AddNewCourseAPI(course: Course) {
+export async function AddNewCourseAPI(course: CourseWithStudent) {
   try {
     console.log(PREFIX_URL);
     const res = await fetch(`${PREFIX_URL + "/Course/Add/course"}`, {
@@ -31,6 +31,51 @@ export async function GetCourse() {
         "Content-Type": "application/json",
       },
     });
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function GetCourseByInstructorId(instructorId: number) {
+  try {
+    const res = await fetch(
+      `${PREFIX_URL + "/Course/GetCourseInstructorId/" + instructorId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function GetTakeAttendanceReportByCourseandInsId(
+  courseId: number,
+  instructorId: number
+) {
+  try {
+    const res = await fetch(
+      `${
+        PREFIX_URL +
+        "/TimeTable/statistics?id=" +
+        instructorId +
+        "&courseId=" +
+        courseId
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await res.json();
     return data;
   } catch (err) {

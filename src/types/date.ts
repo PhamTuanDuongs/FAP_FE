@@ -9,3 +9,7 @@ export interface Day {
   day: string;
   date: string;
 }
+
+export interface Date {
+  date: string;
+}

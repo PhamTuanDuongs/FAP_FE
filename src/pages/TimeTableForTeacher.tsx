@@ -1,4 +1,12 @@
-import { Table, TableContainer, Tbody, Thead, Tr } from "@chakra-ui/react";
+import {
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import SidebarWithHeader from "../components/SideBarWithHeader";
 import { useEffect, useState } from "react";
 import { Schedule } from "../types/Attandance";
@@ -13,6 +21,7 @@ import {
   yearArr,
 } from "../utils/functions/dateUtils";
 import { Day, Week } from "../types/date";
+import Dialog from "../components/Dialog";
 
 function TimetableComponentForTeacher() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -21,6 +30,8 @@ function TimetableComponentForTeacher() {
   const [weeksInYear, setWeeksInYear] = useState<Week[]>([]);
   const [currentWeek, setCurrentWeek] = useState<number>(getCurrentWeek());
   const [currentYear, setCurrentYear] = useState<number>(getCurrentYear());
+  const [isOpen, setIsOpen] = useState(false);
+
   const [dateFrom, setDateFrom] = useState<string>(
     getCurrentWeekday("MMddYYY")[0].date
   );
@@ -119,22 +130,22 @@ function TimetableComponentForTeacher() {
         <Table variant="simple">
           <Thead>
             <Tr>
-              <th>Slot</th>
+              <Th>Slot</Th>
               {days.map((day: Day) => (
-                <th>
+                <Th>
                   {day.day}-{day.date}
-                </th>
+                </Th>
               ))}
             </Tr>
           </Thead>
           <Tbody>
             {slots.map((slot: Slot) => (
-              <tr>
-                <td>
+              <Tr>
+                <Td>
                   Slot {slot.id}-{slot.time}
-                </td>
+                </Td>
                 {days.map((value) => (
-                  <td>
+                  <Td>
                     {schedules.map(
                       (schedule) =>
                         schedule.slot === slot.id &&
@@ -147,9 +158,9 @@ function TimetableComponentForTeacher() {
                           </div>
                         )
                     )}
-                  </td>
+                  </Td>
                 ))}
-              </tr>
+              </Tr>
             ))}
           </Tbody>
         </Table>

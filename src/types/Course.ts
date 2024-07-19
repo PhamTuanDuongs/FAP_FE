@@ -3,7 +3,7 @@ export interface StudentsInCourse {
   roleNumber: string;
 }
 
-export interface Course {
+export interface CourseWithStudent {
   code: string;
   subjectId: number;
   startDate: string;
@@ -14,7 +14,7 @@ export interface Course {
   students: Array<StudentsInCourse>;
 }
 
-export interface ListCourses {
+export interface Course {
   id: number;
   code: string;
   instructor: string;
@@ -23,4 +23,20 @@ export interface ListCourses {
   subject: string;
   room: string;
   manageSlot: number;
+}
+
+export interface AttendanceCourse {
+  studentId: number;
+  scheduleId: number;
+  dateAttended: Date;
+  status: number;
+  comment: number;
+}
+export interface AttendanceReport {
+  courseName: string;
+  rollNumber: string;
+  studentName: string;
+  percentage: number;
+  summary: number;
+  attendances: AttendanceCourse[];
 }

@@ -1,6 +1,3 @@
-import { format } from "path";
-import { Timeslot } from "../../types/TimeSlot";
-
 export const formatDate = (inputDate: string) => {
   return new Date(Date.parse(inputDate)).toLocaleDateString("en-US", {
     day: "2-digit",
@@ -147,3 +144,16 @@ export function getCurrentWeekday(
 }
 
 export const yearArr: number[] = [2021, 2022, 2023, 2024];
+
+export const getCurrentDateFormatted = (): string => {
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Months are zero-based, so we add 1
+
+  // Ensure day and month are two digits
+  const dayFormatted = day < 10 ? `0${day}` : day.toString();
+  const monthFormatted = month < 10 ? `0${month}` : month.toString();
+
+  // Concatenate day and month
+  return `${dayFormatted}/${monthFormatted}`;
+};

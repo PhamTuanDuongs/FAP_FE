@@ -1,19 +1,10 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
-import {
-  Box,
-  Button,
-  Container,
-  Input,
-  position,
-  Select,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Container, Input, Select, Text } from "@chakra-ui/react";
 import SidebarWithHeader from "../components/SideBarWithHeader";
 import { AddNewCourseAPI } from "../services/Course";
-import { Course } from "../types/Course";
+import { Course, CourseWithStudent } from "../types/Course";
 import { toast } from "react-toastify";
-import { formatDate } from "../utils/functions/dateUtils";
 import {
   ConvertToStudentsInCourse,
   ReadFile,
@@ -24,6 +15,8 @@ import { GetAllInstructors } from "../services/Instructor";
 import { Instructor } from "../types/Instructor";
 import { GetAllSubjects } from "../services/Subject";
 import { Subject } from "../types/Attandance";
+import { Room } from "../types/room";
+import { GetAllRooms } from "../services/room";
 
 const validationSchema = yup.object({
   name: yup.string().required("Name is required"),
@@ -55,7 +48,7 @@ function AddNewCourse() {
     { Id: "A46" },
   ];
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [rooms, setRoom] = useState<Timeslot[]>([]);
+  const [rooms, setRoom] = useState<Room[]>([]);
   const [instructors, setInstructor] = useState<Instructor[]>([]);
   const formik = useFormik({
     initialValues: {
@@ -78,7 +71,7 @@ function AddNewCourse() {
         console.log("reading input file:");
         const jsonData = await ReadFile(selectedFile);
         const courseInStudents = ConvertToStudentsInCourse(jsonData);
-        let course: Course = {
+        let course: CourseWithStudent = {
           code: values.name,
           subjectId: parseInt(values.subject),
           startDate: values.startDate,
@@ -115,6 +108,7 @@ function AddNewCourse() {
       }
       setInstructor(response);
     };
+
     const fetchSubjects = async () => {
       const response = await GetAllSubjects();
       if (response.length > 0) {
@@ -122,12 +116,26 @@ function AddNewCourse() {
       }
       setSubjects(response);
     };
+
+    const fetchRooms = async () => {
+      const response = await GetAllRooms();
+      if (response.length > 0) {
+        formik.setFieldValue("room", response[0].id);
+      }
+      setRoom(response);
+    };
     fetchInstructors();
     fetchSubjects();
+    fetchRooms();
   }, []);
 
   return (
     <SidebarWithHeader>
+      <Box marginBottom="10">
+        <Text fontSize="20" fontWeight="bold">
+          Add a new course
+        </Text>
+      </Box>
       <Container>
         <form onSubmit={formik.handleSubmit}>
           <label htmlFor="name">
@@ -248,10 +256,11 @@ function AddNewCourse() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
           >
-            <option selected value={"BE123"}>
-              BE123
-            </option>
-            <option value={"BE124"}>BE234</option>
+            {rooms.map((room) => (
+              <option selected value={room.name}>
+                {room.name}
+              </option>
+            ))}
           </Select>
           <label htmlFor="file">
             Students
