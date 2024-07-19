@@ -55,7 +55,7 @@ function AddNewSubject() {
 
 
     return (
-        <SidebarWithHeader>
+        <SidebarWithHeader role2="admin">
             <Container>
                 <form onSubmit={formik.handleSubmit}>
                     <FormLabel>Subject Code</FormLabel>

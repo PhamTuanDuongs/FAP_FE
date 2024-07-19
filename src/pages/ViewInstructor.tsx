@@ -65,7 +65,7 @@ function ViewInstructor() {
   };
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <Text>Instructor List</Text>
       <Button margin={1} >
         <Link to="/Add/Instructor">Create Instructor</Link>

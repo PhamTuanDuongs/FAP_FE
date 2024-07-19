@@ -28,7 +28,7 @@ function ViewCourses() {
     []
   );
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <CustomTable columns={columns} data={courses} />
     </SidebarWithHeader>
   );

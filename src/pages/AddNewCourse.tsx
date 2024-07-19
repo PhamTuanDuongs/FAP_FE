@@ -128,7 +128,7 @@ function AddNewCourse() {
   }, []);
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <Container>
         <form onSubmit={formik.handleSubmit}>
           <label htmlFor="name">

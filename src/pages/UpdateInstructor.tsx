@@ -12,7 +12,10 @@ import { GetInstructorByIdAPI, UpdateInstructorAPI } from "../services/Instructo
 function UpdateInstructor() {
   const params = useParams();
   const navigate = useNavigate();
+
   const [subject, setSubject] = useState<NewStudent>();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const validationSchema = yup.object({
     rolenumber: yup.string().required("Student rolenumber is required"),
@@ -27,48 +30,49 @@ function UpdateInstructor() {
 
   const formik = useFormik({
     initialValues: {
-        rolenumber: "",
-        username: "",
-        password: "",
-        name: "",
-        address: "",
-        dob: "",
-        email: "",
-        image: "",
-        roleid: 1
+      rolenumber: "",
+      username: "",
+      password: "",
+      name: "",
+      address: "",
+      dob: "",
+      email: "",
+      image: "",
+      image2: "",
+      roleid: 1
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
 
       let newSubjectData: NewInstructor = {
-          instructorCode: values.rolenumber,
-          username: values.username,
-          password: values.password,
-          name: values.name,
-          address: values.address,
-          dob: values.dob,
-          email: values.email,
-          image: values.image,
-          roleId: values.roleid
-    }
+        instructorCode: values.rolenumber,
+        username: values.username,
+        password: values.password,
+        name: values.name,
+        address: values.address,
+        dob: values.dob,
+        email: values.email,
+        image: values.image,
+        roleId: values.roleid
+      }
 
-    console.log(newSubjectData);
+      console.log(newSubjectData);
 
-    const response = UpdateInstructorAPI(Number(params.id),newSubjectData);
-                response.then((res) => {
-                  if (res?.statusCode === 200) {
-                    toast.success(res.data, {
-                      position: "bottom-right",
-                    });
+      const response = UpdateInstructorAPI(Number(params.id), newSubjectData);
+      response.then((res) => {
+        if (res?.statusCode === 200) {
+          toast.success(res.data, {
+            position: "bottom-right",
+          });
 
-                    navigate('/Instructors', { replace: true });
+          navigate('/Instructors', { replace: true });
 
-                  }else{
-                    toast.error(res.data, {
-                        position: "bottom-right",
-                      });
-                  }
-                });
+        } else {
+          toast.error(res.data, {
+            position: "bottom-right",
+          });
+        }
+      });
 
       setSubmitting(false);
     },
@@ -88,6 +92,7 @@ function UpdateInstructor() {
         dob: response.dob ? response.dob.slice(0, 10) : '',
         email: response.email,
         image: response.image,
+        image2: "",
         roleid: response.roleid
       });
     };
@@ -97,9 +102,22 @@ function UpdateInstructor() {
     }
   }, [params.id, formik, formik.setValues, subject]);
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      formik.setFieldValue('image2', file);
+      setImageUrl(URL.createObjectURL(file));
+
+      console.log(file.type);
+
+      formik.setFieldValue('image', file.name);
+      setImageFile(file);
+    };
+  };
+
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <Container>
         <form onSubmit={formik.handleSubmit}>
           <FormLabel>Student ID</FormLabel>
@@ -146,7 +164,7 @@ function UpdateInstructor() {
             name="name"
             id="name"
             value={formik.values.name}
-           onChange={formik.handleChange}
+            onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             isInvalid={formik.touched.name && Boolean(formik.errors.name)}
           ></Input>
@@ -201,6 +219,17 @@ function UpdateInstructor() {
           ></Input>
           {formik.errors.image && (
             <Text color="red">{formik.errors.image}</Text>
+          )}
+
+          <input
+            name="image2"
+            id="image2"
+            type="file"
+            onChange={handleImageChange}
+            onBlur={formik.handleBlur}
+          ></input>
+          {imageUrl && (
+            <img src={imageUrl} alt="" width="100px" />
           )}
 
           <Button marginTop="10px" type="submit">

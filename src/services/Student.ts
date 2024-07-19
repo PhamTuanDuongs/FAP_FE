@@ -21,20 +21,57 @@ export async function GetAllStudents() {
   }
 }
 
-export async function AddNewStudentAPI(subject: NewStudent) {
+export async function GetStudentImageByUsernameAPI(username: string) {
   try {
-    console.log(subject);
-
     var token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
-    var url = PREFIX_URL + "/Student/AddNewStudent";
+    var url = PREFIX_URL + `/Student/GetStudentImageByName/${username}`;
+    console.log(url);
     const res = await fetch(url, {
-      method: "POST",
+      method: "GET",
       headers: {
         "content-type": "application/json",
         authorization: "Bearer " + token,
       },
-      body: JSON.stringify(subject),
+    });
+
+    const blob = await res.blob();
+    return blob;
+    
+  } catch (e) {
+    throw e;
+  }
+}
+
+export async function AddNewStudentAPI(subject: NewStudent, image?: File | null) {
+  try {
+    console.log(subject);
+    console.log(image);
+
+    var token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
+    var url = PREFIX_URL + "/Student/AddNewStudent";
+
+    const formData = new FormData();
+    formData.append('file', image || '');
+    formData.append('Name', subject.name || '');
+    formData.append('Email', subject.email || '');
+    formData.append('Address', subject.address || '');
+    formData.append('Password', subject.password || '');
+    formData.append('Username', subject.username || '');
+    formData.append('RoleNumber', subject.roleNumber || '');
+    formData.append('RoleId', subject.roleId.toString() || '');
+    formData.append('Dob', subject.dob)
+    formData.append('image', subject.image);
+
+    console.log(formData);
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        authorization: "Bearer " + token,
+      },
+      body: formData
     });
 
     const result = await res.text();
@@ -48,20 +85,32 @@ export async function AddNewStudentAPI(subject: NewStudent) {
   }
 }
 
-export async function UpdateStudentAPI(id: number, subject: NewStudent) {
+export async function UpdateStudentAPI(id: number, subject: NewStudent, image?: File | null) {
   try {
     console.log(subject);
+    console.log(image);
 
     var token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJUb2tlbklkIjoiNzJjMDY1YzEtYjkwYy00NGUyLTkyODctMzFmZGM3MjEzMzYxIiwiQWNjb3VudElkIjoiMSIsIlVzZXJuYW1lIjoiZHVvbmdwdDE4Iiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzE4MTU5ODQyLCJleHAiOjE3MTgxNzA2NDIsImlhdCI6MTcxODE1OTg0MiwiaXNzIjoiRlBUVW5pdmVyc2l0eSIsImF1ZCI6IkZBUFVzZXIifQ.KrfVoI8c01BQFrSGADaAr7XCK7fjKa3ZDvA_yrtXrXY";
     var url = PREFIX_URL + `/Student/UpdateStudent/${id}`;
+
+    const formData = new FormData();
+    formData.append('file', image || '');
+    formData.append('Name', subject.name || '');
+    formData.append('Email', subject.email || '');
+    formData.append('Address', subject.address || '');
+    formData.append('Password', subject.password || '');
+    formData.append('Username', subject.username || '');
+    formData.append('RoleNumber', subject.roleNumber || '');
+    formData.append('Dob', subject.dob)
+    formData.append('image', subject.image);
+
     const res = await fetch(url, {
       method: "PUT",
       headers: {
-        "content-type": "application/json",
         authorization: "Bearer " + token,
       },
-      body: JSON.stringify(subject),
+      body: formData
     });
 
     const result = await res.text();

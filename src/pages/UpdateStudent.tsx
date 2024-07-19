@@ -6,12 +6,15 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { NewStudent } from "../types/NewStudent";
-import { GetStudentByIdAPI, UpdateStudentAPI } from "../services/Student";
+import { GetStudentByIdAPI, GetStudentImageByUsernameAPI, UpdateStudentAPI } from "../services/Student";
 
 function UpdateStudent() {
   const params = useParams();
   const navigate = useNavigate();
+
   const [subject, setSubject] = useState<NewStudent>();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const validationSchema = yup.object({
     rolenumber: yup.string().required("Student rolenumber is required"),
@@ -24,50 +27,56 @@ function UpdateStudent() {
     image: yup.string().required("Image is required"),
   });
 
+
   const formik = useFormik({
     initialValues: {
-        rolenumber: "",
-        username: "",
-        password: "",
-        name: "",
-        address: "",
-        dob: "",
-        email: "",
-        image: "",
-        roleid: 1
+      rolenumber: "",
+      username: "",
+      password: "",
+      name: "",
+      address: "",
+      dob: "",
+      email: "",
+      image: "",
+      image2: "",
+      roleid: 1
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
 
       let newSubjectData: NewStudent = {
         roleNumber: values.rolenumber,
-          username: values.username,
-          password: values.password,
-          name: values.name,
-          address: values.address,
-          dob: values.dob,
-          email: values.email,
-          image: values.image,
-          roleId: values.roleid
-    }
+        username: values.username,
+        password: values.password,
+        name: values.name,
+        address: values.address,
+        dob: values.dob,
+        email: values.email,
+        image: values.image,
+        roleId: values.roleid
+      }
 
-    console.log(newSubjectData);
+      console.log(newSubjectData);
 
-    const response = UpdateStudentAPI(Number(params.id),newSubjectData);
-                response.then((res) => {
-                  if (res?.statusCode === 200) {
-                    toast.success(res.data, {
-                      position: "bottom-right",
-                    });
+      const callUpdateStudentAPI = async (imageFile?: File | null) => {
+        const response = await UpdateStudentAPI(Number(params.id), newSubjectData, imageFile);
+        if (response.statusCode === 200) {
+          toast.success(response.data, {
+            position: "bottom-right",
+          });
+          navigate('/Students', { replace: true });
+        } else {
+          toast.error(response.data, {
+            position: "bottom-right",
+          });
+        }
+      };
 
-                    navigate('/Students', { replace: true });
-
-                  }else{
-                    toast.error(res.data, {
-                        position: "bottom-right",
-                      });
-                  }
-                });
+      if (imageFile != null) {
+        callUpdateStudentAPI(imageFile);
+      } else {
+        callUpdateStudentAPI();
+      }
 
       setSubmitting(false);
     },
@@ -78,6 +87,10 @@ function UpdateStudent() {
       const response = await GetStudentByIdAPI(Number(params.id));
       console.log(response);
       setSubject(response);
+
+      const response2 = await GetStudentImageByUsernameAPI(response.image);
+      setImageUrl(URL.createObjectURL(response2));
+
       formik.setValues({
         rolenumber: response.roleNumber,
         username: response.username,
@@ -87,6 +100,7 @@ function UpdateStudent() {
         dob: response.dob ? response.dob.slice(0, 10) : '',
         email: response.email,
         image: response.image,
+        image2: "",
         roleid: response.roleid
       });
     };
@@ -96,9 +110,44 @@ function UpdateStudent() {
     }
   }, [params.id, formik, formik.setValues, subject]);
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      formik.setFieldValue('image2', file);
+      setImageUrl(URL.createObjectURL(file));
+
+      let type: string = "";
+        let result: string =  formik.values.rolenumber + "." + file.type;
+        let newResult: string = result.replace("image/jpeg", "");
+
+        if(file.type === "image/jpg"){
+          type = "jpg"
+          newResult = result.replace("image/jpeg", "");
+        }
+
+        if(file.type === "image/jpeg"){
+          type = "jpg"
+          newResult = result.replace("image/jpeg", type);
+        }
+
+        if(file.type === "image/svg"){
+          type = "svg"
+          newResult = result.replace("image/svg", type);
+        }
+
+        if(file.type === "image/png"){
+          type = "png";
+          newResult = result.replace("image/png", type);
+        }
+
+      formik.setFieldValue('image', newResult);
+      setImageFile(file);
+    };
+  };
+
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <Container>
         <form onSubmit={formik.handleSubmit}>
           <FormLabel>Student ID</FormLabel>
@@ -145,7 +194,7 @@ function UpdateStudent() {
             name="name"
             id="name"
             value={formik.values.name}
-           onChange={formik.handleChange}
+            onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             isInvalid={formik.touched.name && Boolean(formik.errors.name)}
           ></Input>
@@ -197,9 +246,21 @@ function UpdateStudent() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             isInvalid={formik.touched.image && Boolean(formik.errors.image)}
+            readOnly
           ></Input>
           {formik.errors.image && (
             <Text color="red">{formik.errors.image}</Text>
+          )}
+
+          <input
+            name="image2"
+            id="image2"
+            type="file"
+            onChange={handleImageChange}
+            onBlur={formik.handleBlur}
+          ></input>
+          {imageUrl && (
+            <img src={imageUrl} alt="" width="100px" />
           )}
 
           <Button marginTop="10px" type="submit">

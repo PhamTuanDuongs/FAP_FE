@@ -77,7 +77,7 @@ function UpdateSubject() {
   }, [params.id, formik, formik.setValues, subject]);
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <Container>
         <form onSubmit={formik.handleSubmit}>
           <FormLabel>Subject ID</FormLabel>

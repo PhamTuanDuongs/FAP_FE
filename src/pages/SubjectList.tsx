@@ -65,7 +65,7 @@ function SubjectList() {
   };
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <Text>Subject List</Text>
       <Button margin={1} >
         <Link to="/Add/Subject">Create Subject</Link>

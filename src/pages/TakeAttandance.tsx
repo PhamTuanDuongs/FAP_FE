@@ -3,7 +3,7 @@ import SidebarWithHeader from "../components/SideBarWithHeader";
 
 function TakeAttendance() {
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <Text>Welcome to the TakeAttance</Text>
     </SidebarWithHeader>
   );

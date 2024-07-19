@@ -6,8 +6,12 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { NewStudent } from "../types/NewStudent";
 import { AddNewStudentAPI } from "../services/Student";
+import { useState } from "react";
 
 function AddNewStudent() {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
     const navigate = useNavigate();
 
     const validationSchema = yup.object({
@@ -32,6 +36,7 @@ function AddNewStudent() {
             dob: "",
             email: "",
             image: "",
+            image2: "",
             roleid: 1
         },
         validationSchema: validationSchema,
@@ -48,31 +53,68 @@ function AddNewStudent() {
                 roleId: values.roleid
             }
 
-            console.log(newSubjectData);
+            if(imageFile != null){
+              const response = AddNewStudentAPI(newSubjectData,imageFile);
+              response.then((res) => {
+                if (res?.statusCode === 200) {
+                  toast.success(res.data, {
+                    position: "bottom-right",
+                  });
 
-              const response = AddNewStudentAPI(newSubjectData);
-                response.then((res) => {
-                  if (res?.statusCode === 200) {
-                    toast.success(res.data, {
+                  navigate('/Students', { replace: true });
+
+                }else{
+                  toast.error(res.data, {
                       position: "bottom-right",
                     });
-
-                    navigate('/Students', { replace: true });
-
-                  }else{
-                    toast.error(res.data, {
-                        position: "bottom-right",
-                      });
-                  }
-                });
-
+                }
+              });
+            }
+              
             setSubmitting(false);
         },
     });
 
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file) {
+        formik.setFieldValue('image2', file);
+        setImageUrl(URL.createObjectURL(file));
+
+        console.log(formik.values.rolenumber);
+        console.log(file.type);
+
+        let type: string = "";
+        let result: string =  formik.values.rolenumber + "." + file.type;
+        let newResult: string = result.replace("image/jpeg", "");
+
+        if(file.type === "image/jpg"){
+          type = "jpg"
+          newResult = result.replace("image/jpeg", "");
+        }
+
+        if(file.type === "image/jpeg"){
+          type = "jpg"
+          newResult = result.replace("image/jpeg", type);
+        }
+
+        if(file.type === "image/svg"){
+          type = "svg"
+          newResult = result.replace("image/svg", type);
+        }
+
+        if(file.type === "image/png"){
+          type = "png";
+          newResult = result.replace("image/png", type);
+        }
+
+      formik.setFieldValue('image', newResult);
+      setImageFile(file);
+    };
+    };
 
     return (
-        <SidebarWithHeader>
+        <SidebarWithHeader role2="admin">
           <Container>
             <form onSubmit={formik.handleSubmit}>
               <FormLabel>Student Role Number</FormLabel>
@@ -168,10 +210,22 @@ function AddNewStudent() {
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 isInvalid={formik.touched.image && Boolean(formik.errors.image)}
+                readOnly
               ></Input>
               {formik.errors.image && (
                 <Text color="red">{formik.errors.image}</Text>
               )}
+
+              <input
+                name="image2"
+                id="image2"
+                type="file"
+                onChange={handleImageChange}
+                onBlur={formik.handleBlur}
+                required
+              ></input>
+              {imageUrl && (<img src={imageUrl} alt="" width="100px" />)}
+
               <FormLabel>Role</FormLabel>
               <Input
                 value="Student"

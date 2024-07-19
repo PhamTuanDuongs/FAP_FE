@@ -65,7 +65,7 @@ function ViewStudent() {
   };
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <Text>Student List</Text>
       <Button margin={1} >
         <Link to="/Add/Student">Create Student</Link>
