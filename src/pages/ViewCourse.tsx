@@ -29,12 +29,7 @@ function ViewCourses() {
     []
   );
   return (
-    <SidebarWithHeader>
-      <Box marginBottom="10">
-        <Text fontSize="20" fontWeight="bold">
-          List of courses
-        </Text>
-      </Box>
+    <SidebarWithHeader role2="admin">
       <CustomTable columns={columns} data={courses} />
     </SidebarWithHeader>
   );

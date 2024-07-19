@@ -25,7 +25,7 @@ function AttendaceReport() {
   }, []);
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <TableContainer>
         <Table variant="simple">
           <Thead>
@@ -59,7 +59,6 @@ function AttendaceReport() {
           </Tbody>
         </Table>
       </TableContainer>
-    </SidebarWithHeader>
   );
 }
 

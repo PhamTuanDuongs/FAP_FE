@@ -100,7 +100,7 @@ function TimetableComponentForStudent() {
   }, [dateFrom, dateTo]);
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="student">
       <Box marginBottom="10">
         <Text fontSize="20" fontWeight="bold">
           Schedule of Week

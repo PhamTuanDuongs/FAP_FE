@@ -94,6 +94,7 @@ function AddNewCourse() {
             });
           }
         });
+        console.log()
       } catch (error) {
         console.error("An error occurred:", error);
       }
@@ -130,7 +131,7 @@ function AddNewCourse() {
   }, []);
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="admin">
       <Box marginBottom="10">
         <Text fontSize="20" fontWeight="bold">
           Add a new course
