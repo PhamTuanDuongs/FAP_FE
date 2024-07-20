@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import SidebarWithHeader from "../components/SideBarWithHeader";
 import { useParams } from "react-router-dom";
-import { GetTakeAttendanceReportByCourseandInsId } from "../services/Course";
+import { GetStatisticsToExcel, GetTakeAttendanceReportByCourseandInsId } from "../services/Course";
 import { AttendanceCourse, AttendanceReport } from "../types/Course";
 import {
+  Button,
   Table,
   TableContainer,
   Tbody,
@@ -14,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { GetDatesByCourseInstructor } from "../services/Schedule";
 import { Date } from "../types/date";
+import TokenStorageService from "../services/TokenStorage";
 
 function AttendaceReportDetail() {
   const [courses, setCourse] = useState<AttendanceReport[]>([]);
@@ -30,20 +32,38 @@ function AttendaceReportDetail() {
     }
   }
   useEffect(() => {
+    const tokenStorageService = new TokenStorageService();
+    const user = tokenStorageService.getUser();
+
     const fetchCourse = async (id: any) => {
-      const response = await GetTakeAttendanceReportByCourseandInsId(id, 1);
+      const response = await GetTakeAttendanceReportByCourseandInsId(id, user.id);
       setCourse(response);
     };
     const fetchDates = async (id: any) => {
-      const responsedate = await GetDatesByCourseInstructor(id, 1);
+      const responsedate = await GetDatesByCourseInstructor(id, user.id);
       setDates(responsedate);
     };
     fetchDates(params.id);
     fetchCourse(params.id);
   }, [params.id]);
 
+
+  const ExportFileExcel = () => {
+    const tokenStorageService = new TokenStorageService();
+    const user = tokenStorageService.getUser();
+
+    console.log(params.id);
+    console.log(user.id);
+
+    if(params.id && user.id){
+      GetStatisticsToExcel(parseInt(params.id),user.id);
+    }
+
+  }
+
   return (
     <SidebarWithHeader role2="instructor">
+      <Button onClick={() => ExportFileExcel()}>ExportFileExcel</Button>
       <TableContainer>
         <Table variant="simple">
           <Thead>

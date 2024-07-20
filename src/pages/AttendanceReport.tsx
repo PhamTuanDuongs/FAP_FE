@@ -1,4 +1,5 @@
 import {
+  Button,
   Table,
   TableCaption,
   TableContainer,
@@ -11,22 +12,29 @@ import {
 import SidebarWithHeader from "../components/SideBarWithHeader";
 import { useEffect, useState } from "react";
 import { Course } from "../types/Course";
-import { GetCourseByInstructorId } from "../services/Course";
+import { GetCourseByInstructorId, GetStatisticsToExcel } from "../services/Course";
 import { Link } from "react-router-dom";
+import TokenStorageService from "../services/TokenStorage";
 
 function AttendaceReport() {
   const [courses, setCourses] = useState<Course[]>([]);
   useEffect(() => {
+    const tokenStorageService = new TokenStorageService();
+    const user = tokenStorageService.getUser();
+
     const fetchCourses = async () => {
-      const response = await GetCourseByInstructorId(1);
+      const response = await GetCourseByInstructorId(user.id);
       setCourses(response);
     };
 
     fetchCourses();
   }, []);
 
+  
+
   return (
     <SidebarWithHeader role2="instructor">
+      
       <TableContainer>
         <Table variant="simple">
           {courses.length === 0 && <TableCaption>No data</TableCaption>}

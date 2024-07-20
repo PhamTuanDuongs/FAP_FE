@@ -27,6 +27,7 @@ import {
 } from "../utils/functions/dateUtils";
 import { Day, Week } from "../types/date";
 import Dialog from "../components/Dialog";
+import TokenStorageService from "../services/TokenStorage";
 
 function TimetableComponentForStudent() {
   const [schedules, setSchedules] = useState<Attendance[]>([]);
@@ -89,8 +90,11 @@ function TimetableComponentForStudent() {
   }, []);
 
   useEffect(() => {
+    const tokenStorageService = new TokenStorageService();
+    const user = tokenStorageService.getUser();
+
     const fetchSchedules = async () => {
-      const response = await GetschedulesForStudent(1, dateFrom, dateTo);
+      const response = await GetschedulesForStudent(user.id, dateFrom, dateTo);
       setSchedules(response);
     };
 

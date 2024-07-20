@@ -27,6 +27,7 @@ import {
 } from "../utils/functions/dateUtils";
 import { Day, Week } from "../types/date";
 import Dialog from "../components/Dialog";
+import TokenStorageService from "../services/TokenStorage";
 
 function TimetableComponentForTeacher() {
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -95,8 +96,13 @@ function TimetableComponentForTeacher() {
   }, []);
 
   useEffect(() => {
+    const tokenStorageService = new TokenStorageService();
+    const user = tokenStorageService.getUser();
+
+    console.log(user.id);
+
     const fetchSchedules = async () => {
-      const response = await GetschedulesForInstructor(1, dateFrom, dateTo);
+      const response = await GetschedulesForInstructor(user.id, dateFrom, dateTo);
       setSchedules(response);
     };
 

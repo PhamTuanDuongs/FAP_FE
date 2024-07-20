@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Student } from "../types/Student";
-import { DeleteStudentAPI, GetAllStudents } from "../services/Student";
+import { DeleteStudentAPI, GetAllStudents, GetStudentInfoFile } from "../services/Student";
 
 interface StudentLine {
   data: Student;
@@ -22,7 +22,7 @@ function ViewStudent() {
       setIsLoaded(true);
     };
 
-      fetchStudents();
+    fetchStudents();
   }, [isLoaded]);
 
   const NewSubjectLine: React.FC<StudentLine> = ({ data }) => {
@@ -64,13 +64,19 @@ function ViewStudent() {
 
   };
 
+  const ExportFileExcel = () => {
+    console.log("file");
+    GetStudentInfoFile();
+  }
+
   return (
     <SidebarWithHeader role2="admin">
       <Text>Student List</Text>
-      <Button margin={1} >
+      <Button marginRight={2} >
         <Link to="/Add/Student">Create Student</Link>
       </Button>
-      <Button onClick={() => window.location.reload()}>Refresh</Button>
+      <Button marginRight={2} onClick={() => window.location.reload()}>Refresh</Button>
+      <Button onClick={() => ExportFileExcel()}>ExportFileExcel</Button>
 
       <TableContainer marginTop={5}>
         <Table>
