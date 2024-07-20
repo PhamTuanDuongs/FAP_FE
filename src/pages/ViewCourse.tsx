@@ -4,7 +4,15 @@ import { Course } from "../types/Course";
 
 import CustomTable from "../components/CustomTable";
 import React, { useEffect } from "react";
-import { Box, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Table,
+  TableCaption,
+  Text,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 
 function ViewCourses() {
   const [courses, setCourses] = React.useState<Course[]>([]);
@@ -30,7 +38,25 @@ function ViewCourses() {
   );
   return (
     <SidebarWithHeader role2="admin">
-      <CustomTable columns={columns} data={courses} />
+      {courses.length === 0 ? (
+        <Table variant="simple">
+          <TableCaption>No data</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>No</Th>
+              <Th>CODE</Th>
+              <Th>SUBJECT</Th>
+              <Th>INSTRUCTOR</Th>
+              <Th>STARTDATE</Th>
+              <Th>ENDDATE</Th>
+              <Th>ROOM</Th>
+              <Th>MANAGESLOT</Th>
+            </Tr>
+          </Thead>
+        </Table>
+      ) : (
+        <CustomTable columns={columns} data={courses} />
+      )}
     </SidebarWithHeader>
   );
 }

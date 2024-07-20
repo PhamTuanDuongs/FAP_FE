@@ -43,7 +43,7 @@ function AttendaceReportDetail() {
   }, [params.id]);
 
   return (
-    <SidebarWithHeader>
+    <SidebarWithHeader role2="instructor">
       <TableContainer>
         <Table variant="simple">
           <Thead>

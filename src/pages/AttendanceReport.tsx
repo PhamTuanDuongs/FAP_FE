@@ -1,5 +1,6 @@
 import {
   Table,
+  TableCaption,
   TableContainer,
   Tbody,
   Td,
@@ -25,9 +26,10 @@ function AttendaceReport() {
   }, []);
 
   return (
-    <SidebarWithHeader role2="admin">
+    <SidebarWithHeader role2="instructor">
       <TableContainer>
         <Table variant="simple">
+          {courses.length === 0 && <TableCaption>No data</TableCaption>}
           <Thead>
             <Tr>
               <Th>No</Th>
@@ -59,6 +61,7 @@ function AttendaceReport() {
           </Tbody>
         </Table>
       </TableContainer>
+    </SidebarWithHeader>
   );
 }
 

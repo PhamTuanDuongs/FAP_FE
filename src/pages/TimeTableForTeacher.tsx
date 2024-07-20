@@ -1,8 +1,12 @@
 import {
+  Box,
+  Flex,
+  Select,
   Table,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -14,6 +18,7 @@ import { GetschedulesForInstructor } from "../services/Schedule";
 import { Slot, slots } from "../utils/functions/slots";
 import {
   getAllWeeks,
+  getCurrentDateFormatted,
   getCurrentWeek,
   getCurrentWeekday,
   getCurrentYear,
@@ -100,71 +105,95 @@ function TimetableComponentForTeacher() {
 
   // response.then((res: Attendance[]) => setSchedules(res));
   return (
-    <SidebarWithHeader role2="teacher">
-      <h3>Schedule of Week</h3>
-      <label htmlFor="year">Year</label>
-      <select
-        id="year"
-        onChange={(e) => handleGetAllWeeksInYear(parseInt(e.target.value))}
-      >
-        {years.map((year: number) => (
-          <option value={year} selected={year === currentYear}>
-            {year}
-          </option>
-        ))}
-      </select>
-      <br />
-      <label htmlFor="weeks">Week</label>
-      <select id="weeks" onChange={(e) => handelGetDaysInAWeek(e.target.value)}>
-        {weeksInYear.map((date: Week) => (
-          <option
-            key={date.weekNumber}
-            value={date.weekNumber + ":" + date.year}
-            selected={date.weekNumber === currentWeek}
+    <SidebarWithHeader role2="instructor">
+      <Box marginBottom="10">
+        <Text fontSize="20" fontWeight="bold">
+          Schedule of Week
+        </Text>
+      </Box>
+      <Box>
+        <Flex justifyContent="flex-start" gap="550">
+          <Select
+            width={150}
+            name="year"
+            aria-label="year"
+            id="year"
+            onChange={(e) => handleGetAllWeeksInYear(parseInt(e.target.value))}
           >
-            {date.startDate}-{date.endDate}
-          </option>
-        ))}
-      </select>
-      <TableContainer>
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Slot</Th>
-              {days.map((day: Day) => (
-                <Th>
-                  {day.day}-{day.date}
-                </Th>
-              ))}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {slots.map((slot: Slot) => (
+            {years.map((year: number) => (
+              <option value={year} selected={year === currentYear}>
+                Year - {year}
+              </option>
+            ))}
+          </Select>
+          <Select
+            width={150}
+            aria-label="weeks"
+            id="weeks"
+            onChange={(e) => handelGetDaysInAWeek(e.target.value)}
+          >
+            {weeksInYear.map((date: Week) => (
+              <option
+                key={date.weekNumber}
+                value={date.weekNumber + ":" + date.year}
+                selected={date.weekNumber === currentWeek}
+              >
+                {date.startDate}-{date.endDate}
+              </option>
+            ))}
+          </Select>
+        </Flex>
+        <TableContainer>
+          <Table variant="simple">
+            <Thead>
               <Tr>
-                <Td>
-                  Slot {slot.id}-{slot.time}
-                </Td>
-                {days.map((value) => (
-                  <Td>
-                    {schedules.map(
-                      (schedule) =>
-                        schedule.slot === slot.id &&
-                        schedule.date === value.date && (
-                          <div>
-                            <div>{schedule.instructorCode}</div>
-                            <div>{schedule.course.code}</div>
-                            <div>at{schedule.room}</div>
-                            {checkStatus(schedule.status)}
-                          </div>
-                        )
-                    )}
-                  </Td>
+                <Th fontWeight="extrabold">Slot</Th>
+                {days.map((day: Day) => (
+                  <Th
+                    fontWeight="extrabold"
+                    color={
+                      getCurrentDateFormatted() === day.date ? "red" : "black"
+                    }
+                  >
+                    {day.day}-{day.date}
+                  </Th>
                 ))}
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+            </Thead>
+            <Tbody>
+              {slots.map((slot: Slot) => (
+                <Tr>
+                  <Td>
+                    Slot {slot.id}-{slot.time}
+                  </Td>
+                  {days.map((value) => (
+                    <Td>
+                      {schedules.map(
+                        (schedule) =>
+                          schedule.slot === slot.id &&
+                          schedule.date === value.date && (
+                            <div>
+                              <div>{schedule.instructorCode}</div>
+                              <div>{schedule.course.code}</div>
+                              <div>at{schedule.room}</div>
+                              <Text
+                                color={
+                                  schedule.status === true ? "blue" : "red"
+                                }
+                              >
+                                {checkStatus(schedule.status)}
+                              </Text>
+                            </div>
+                          )
+                      )}
+                    </Td>
+                  ))}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Box>
     </SidebarWithHeader>
   );
 }

@@ -49,60 +49,65 @@ const LinkItems: Array<LinkItemProps> = [
     name: "Weekly Timetable",
     icon: FiCalendar,
     url: "/Student/Report/ScheduleOfWeek ",
-    roles: ["student", "instructor"]
+    roles: ["student"],
+  },
+
+  {
+    name: "Weekly Timetable",
+    icon: FiCalendar,
+    url: "/Teacher/Report/ScheduleOfWeek ",
+    roles: ["instructor"],
   },
   {
     name: "Take Attendance",
     icon: FiCheckCircle,
     url: "/takeAttendance",
-    roles: ["instructor, admin"]
+    roles: ["instructor, admin"],
   },
   {
     name: "Attendance Report",
     icon: FiUserCheck,
     url: "/Student/Report/Attendance",
-    roles: ["instructor"]
+    roles: ["instructor"],
   },
 
   {
     name: "Create a new Course",
     icon: FiPlusCircle,
     url: "/Add/Course",
-    roles: ["admin"]
+    roles: ["admin"],
   },
 
   {
     name: "View List of Courses",
     icon: FiPlusCircle,
     url: "/Courses",
-    roles: ["admin"]
+    roles: ["admin"],
   },
 
   {
     name: "Subjects",
     icon: FiPlusCircle,
     url: "/Subjects",
-    roles: ["admin"]
-  }
-  ,
-
+    roles: ["admin"],
+  },
   {
     name: "Students",
     icon: FiPlusCircle,
     url: "/Students",
-    roles: ["admin"]
+    roles: ["admin"],
   },
   {
     name: "Instructors",
     icon: FiPlusCircle,
     url: "/Instructors",
-    roles: ["admin"]
-  }
-
+    roles: ["admin"],
+  },
 ];
 
 export default function SidebarWithHeader({
-  children, role2
+  children,
+  role2,
 }: {
   children: ReactNode;
   role2: string;
@@ -111,7 +116,8 @@ export default function SidebarWithHeader({
   return (
     <Box minH="100vh" display="flex" flexDirection="column">
       <Box flex="1">
-        <SidebarContent role = {role2}
+        <SidebarContent
+          role={role2}
           onClose={() => onClose}
           display={{ base: "none", md: "block" }}
         />
@@ -125,7 +131,7 @@ export default function SidebarWithHeader({
           size="full"
         >
           <DrawerContent>
-            <SidebarContent onClose={onClose} role=""/>
+            <SidebarContent onClose={onClose} role="" />
           </DrawerContent>
         </Drawer>
         <MobileNav onOpen={onOpen} />
@@ -154,7 +160,7 @@ interface SidebarProps extends BoxProps {
   role: string;
 }
 
-const SidebarContent = ({ onClose,role, ...rest }: SidebarProps) => {
+const SidebarContent = ({ onClose, role, ...rest }: SidebarProps) => {
   return (
     <Box
       marginTop="50px"
@@ -304,11 +310,15 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               <MenuDivider />
-              <MenuItem onClick={() => {
-                const tokenStorageService = new TokenStorageService();
-                tokenStorageService.signOut();
-                window.location.reload();
-              }}>Sign out</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  const tokenStorageService = new TokenStorageService();
+                  tokenStorageService.signOut();
+                  window.location.reload();
+                }}
+              >
+                Sign out
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>

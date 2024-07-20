@@ -1,9 +1,7 @@
 import {
   Box,
-  Container,
   Flex,
   Select,
-  Spacer,
   Table,
   TableContainer,
   Tbody,
