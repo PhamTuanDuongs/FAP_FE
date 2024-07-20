@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { NewStudent } from "../types/NewStudent";
 import { NewInstructor } from "../types/NewInstructor";
-import { GetInstructorByIdAPI, UpdateInstructorAPI } from "../services/Instructor";
+import { GetInstructorByIdAPI, GetInstructorImageByUsernameAPI, UpdateInstructorAPI } from "../services/Instructor";
 
 function UpdateInstructor() {
   const params = useParams();
@@ -58,7 +58,7 @@ function UpdateInstructor() {
 
       console.log(newSubjectData);
 
-      const response = UpdateInstructorAPI(Number(params.id), newSubjectData);
+      const response = UpdateInstructorAPI(Number(params.id), newSubjectData, imageFile);
       response.then((res) => {
         if (res?.statusCode === 200) {
           toast.success(res.data, {
@@ -83,6 +83,10 @@ function UpdateInstructor() {
       const response = await GetInstructorByIdAPI(Number(params.id));
       console.log(response);
       setSubject(response);
+
+      const response2 = await GetInstructorImageByUsernameAPI(response.image);
+      setImageUrl(URL.createObjectURL(response2));
+
       formik.setValues({
         rolenumber: response.instructorCode,
         username: response.username,
@@ -108,9 +112,31 @@ function UpdateInstructor() {
       formik.setFieldValue('image2', file);
       setImageUrl(URL.createObjectURL(file));
 
-      console.log(file.type);
+      let type: string = "";
+        let result: string =  formik.values.rolenumber + "." + file.type;
+        let newResult: string = result.replace("image/jpeg", "");
 
-      formik.setFieldValue('image', file.name);
+        if(file.type === "image/jpg"){
+          type = "jpg"
+          newResult = result.replace("image/jpeg", "");
+        }
+
+        if(file.type === "image/jpeg"){
+          type = "jpg"
+          newResult = result.replace("image/jpeg", type);
+        }
+
+        if(file.type === "image/svg"){
+          type = "svg"
+          newResult = result.replace("image/svg", type);
+        }
+
+        if(file.type === "image/png"){
+          type = "png";
+          newResult = result.replace("image/png", type);
+        }
+
+      formik.setFieldValue('image', newResult);
       setImageFile(file);
     };
   };
@@ -232,6 +258,7 @@ function UpdateInstructor() {
             <img src={imageUrl} alt="" width="100px" />
           )}
 
+          
           <Button marginTop="10px" type="submit">
             Update Instructor
           </Button>
