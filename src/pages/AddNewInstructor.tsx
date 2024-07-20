@@ -4,7 +4,6 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { NewStudent } from "../types/NewStudent";
 import { AddNewInstructorAPI } from "../services/Instructor";
 import { NewInstructor } from "../types/NewInstructor";
 import { useState } from "react";
@@ -55,7 +54,7 @@ function AddNewInstructor() {
 
       console.log(newSubjectData);
 
-      const response = AddNewInstructorAPI(newSubjectData);
+      const response = AddNewInstructorAPI(newSubjectData, imageFile);
       response.then((res) => {
         if (res?.statusCode === 200) {
           toast.success(res.data, {
@@ -81,7 +80,34 @@ function AddNewInstructor() {
       formik.setFieldValue('image2', file);
       setImageUrl(URL.createObjectURL(file));
 
-    formik.setFieldValue('image', file.name);
+      console.log(formik.values.instructorCode);
+      console.log(file.type);
+
+      let type: string = "";
+      let result: string =  formik.values.instructorCode + "." + file.type;
+      let newResult: string = result.replace("image/jpeg", "");
+
+      if(file.type === "image/jpg"){
+        type = "jpg"
+        newResult = result.replace("image/jpeg", "");
+      }
+
+      if(file.type === "image/jpeg"){
+        type = "jpg"
+        newResult = result.replace("image/jpeg", type);
+      }
+
+      if(file.type === "image/svg"){
+        type = "svg"
+        newResult = result.replace("image/svg", type);
+      }
+
+      if(file.type === "image/png"){
+        type = "png";
+        newResult = result.replace("image/png", type);
+      }
+
+    formik.setFieldValue('image', newResult);
     setImageFile(file);
   };
   };
@@ -184,6 +210,7 @@ function AddNewInstructor() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             isInvalid={formik.touched.image && Boolean(formik.errors.image)}
+            readOnly
           ></Input>
           {formik.errors.image && (
             <Text color="red">{formik.errors.image}</Text>
@@ -204,6 +231,7 @@ function AddNewInstructor() {
             value="Instructor"
             readOnly
           ></Input>
+          
           <Button marginTop='10px' type="submit">Add New Instructor</Button>
         </form>
       </Container>

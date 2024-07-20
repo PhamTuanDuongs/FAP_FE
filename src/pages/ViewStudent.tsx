@@ -33,7 +33,7 @@ function ViewStudent() {
         <Td>{data.name}</Td>
         <Td>{data.email}</Td>
         <Td>
-          <Button onClick={() => {
+          <Button marginRight={2} onClick={() => {
             navigate(`/Update/Student/${data.id}`);
           }}>
             Update

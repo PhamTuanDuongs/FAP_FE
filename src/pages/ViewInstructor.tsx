@@ -33,7 +33,7 @@ function ViewInstructor() {
         <Td>{data.name}</Td>
         <Td>{data.email}</Td>
         <Td>
-          <Button onClick={() => {
+          <Button marginRight={2} onClick={() => {
             navigate(`/Update/Instructor/${data.id}`);
           }}>
             Update
