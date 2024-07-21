@@ -58,13 +58,9 @@ function TimetableComponentForTeacher() {
       let currentWeek = parseInt(resultSplit[0]);
       let currentYear = parseInt(resultSplit[1]);
       if (currentYear !== 2024) {
-        setDaysInAWeek(getDaysInWeek(currentWeek + 1, currentYear, "ddMM"));
-        setDateFrom(
-          getDaysInWeek(currentWeek + 1, currentYear, "MMddYYY")[0].date
-        );
-        setDateTo(
-          getDaysInWeek(currentWeek + 1, currentYear, "MMddYYY")[6].date
-        );
+        setDaysInAWeek(getDaysInWeek(currentWeek, currentYear, "ddMM"));
+        setDateFrom(getDaysInWeek(currentWeek, currentYear, "MMddYYY")[0].date);
+        setDateTo(getDaysInWeek(currentWeek, currentYear, "MMddYYY")[6].date);
       } else {
         setDaysInAWeek(getDaysInWeek(currentWeek, currentYear, "ddMM"));
         setDateFrom(getDaysInWeek(currentWeek, currentYear, "MMddYYY")[0].date);
@@ -90,7 +86,7 @@ function TimetableComponentForTeacher() {
     }
   };
   useEffect(() => {
-    setDaysInAWeek(getCurrentWeekday("ddMM"));
+    setDaysInAWeek(getDaysInWeek(currentWeek - 1, currentYear, "ddMM"));
     setWeeksInYear(getAllWeeks(getCurrentYear()));
     setYears(yearArr);
   }, []);
@@ -98,11 +94,12 @@ function TimetableComponentForTeacher() {
   useEffect(() => {
     const tokenStorageService = new TokenStorageService();
     const user = tokenStorageService.getUser();
-
-    console.log(user.id);
-
     const fetchSchedules = async () => {
-      const response = await GetschedulesForInstructor(user.id, dateFrom, dateTo);
+      const response = await GetschedulesForInstructor(
+        user.id,
+        dateFrom,
+        dateTo
+      );
       setSchedules(response);
     };
 
@@ -142,7 +139,7 @@ function TimetableComponentForTeacher() {
               <option
                 key={date.weekNumber}
                 value={date.weekNumber + ":" + date.year}
-                selected={date.weekNumber === currentWeek}
+                selected={date.weekNumber === currentWeek - 1}
               >
                 {date.startDate}-{date.endDate}
               </option>

@@ -48,6 +48,7 @@ function AttendaceReport() {
               <Th>Subject</Th>
               <Th>Room</Th>
               <Th>ManageSlot</Th>
+              <Th>Action</Th>
             </Tr>
           </Thead>
           <Tbody>

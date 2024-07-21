@@ -37,13 +37,15 @@ export async function GetStudentImageByUsernameAPI(username: string) {
 
     const blob = await res.blob();
     return blob;
-
   } catch (e) {
     throw e;
   }
 }
 
-export async function AddNewStudentAPI(subject: NewStudent, image?: File | null) {
+export async function AddNewStudentAPI(
+  subject: NewStudent,
+  image?: File | null
+) {
   try {
     console.log(subject);
     console.log(image);
@@ -53,16 +55,16 @@ export async function AddNewStudentAPI(subject: NewStudent, image?: File | null)
     var url = PREFIX_URL + "/Student/AddNewStudent";
 
     const formData = new FormData();
-    formData.append('file', image || '');
-    formData.append('Name', subject.name || '');
-    formData.append('Email', subject.email || '');
-    formData.append('Address', subject.address || '');
-    formData.append('Password', subject.password || '');
-    formData.append('Username', subject.username || '');
-    formData.append('RoleNumber', subject.roleNumber || '');
-    formData.append('RoleId', subject.roleId.toString() || '');
-    formData.append('Dob', subject.dob)
-    formData.append('image', subject.image);
+    formData.append("file", image || "");
+    formData.append("Name", subject.name || "");
+    formData.append("Email", subject.email || "");
+    formData.append("Address", subject.address || "");
+    formData.append("Password", subject.password || "");
+    formData.append("Username", subject.username || "");
+    formData.append("RoleNumber", subject.roleNumber || "");
+    formData.append("RoleId", subject.roleId.toString() || "");
+    formData.append("Dob", subject.dob);
+    formData.append("image", subject.image);
 
     console.log(formData);
 
@@ -71,21 +73,25 @@ export async function AddNewStudentAPI(subject: NewStudent, image?: File | null)
       headers: {
         authorization: "Bearer " + token,
       },
-      body: formData
+      body: formData,
     });
 
     const result = await res.text();
 
     return {
       data: result,
-      statusCode: res.status
-    }
+      statusCode: res.status,
+    };
   } catch (e) {
     throw e;
   }
 }
 
-export async function UpdateStudentAPI(id: number, subject: NewStudent, image?: File | null) {
+export async function UpdateStudentAPI(
+  id: number,
+  subject: NewStudent,
+  image?: File | null
+) {
   try {
     console.log(subject);
     console.log(image);
@@ -95,30 +101,30 @@ export async function UpdateStudentAPI(id: number, subject: NewStudent, image?: 
     var url = PREFIX_URL + `/Student/UpdateStudent/${id}`;
 
     const formData = new FormData();
-    formData.append('file', image || '');
-    formData.append('Name', subject.name || '');
-    formData.append('Email', subject.email || '');
-    formData.append('Address', subject.address || '');
-    formData.append('Password', subject.password || '');
-    formData.append('Username', subject.username || '');
-    formData.append('RoleNumber', subject.roleNumber || '');
-    formData.append('Dob', subject.dob)
-    formData.append('image', subject.image);
+    formData.append("file", image || "");
+    formData.append("Name", subject.name || "");
+    formData.append("Email", subject.email || "");
+    formData.append("Address", subject.address || "");
+    formData.append("Password", subject.password || "");
+    formData.append("Username", subject.username || "");
+    formData.append("RoleNumber", subject.roleNumber || "");
+    formData.append("Dob", subject.dob);
+    formData.append("image", subject.image);
 
     const res = await fetch(url, {
       method: "PUT",
       headers: {
         authorization: "Bearer " + token,
       },
-      body: formData
+      body: formData,
     });
 
     const result = await res.text();
 
     return {
       data: result,
-      statusCode: res.status
-    }
+      statusCode: res.status,
+    };
   } catch (e) {
     throw e;
   }
@@ -141,8 +147,8 @@ export async function DeleteStudentAPI(id: number) {
 
     return {
       data: result,
-      statusCode: res.status
-    }
+      statusCode: res.status,
+    };
   } catch (e) {
     throw e;
   }

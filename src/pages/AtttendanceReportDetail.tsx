@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import SidebarWithHeader from "../components/SideBarWithHeader";
 import { useParams } from "react-router-dom";
-import { GetStatisticsToExcel, GetTakeAttendanceReportByCourseandInsId } from "../services/Course";
+import {
+  GetStatisticsToExcel,
+  GetTakeAttendanceReportByCourseandInsId,
+} from "../services/Course";
 import { AttendanceCourse, AttendanceReport } from "../types/Course";
 import {
   Button,
@@ -26,9 +29,9 @@ function AttendaceReportDetail() {
     if (status === 0) {
       return "-";
     } else if (status === 1) {
-      return "P";
+      return "Present";
     } else {
-      return "A";
+      return "Absent";
     }
   }
   useEffect(() => {
@@ -36,7 +39,10 @@ function AttendaceReportDetail() {
     const user = tokenStorageService.getUser();
 
     const fetchCourse = async (id: any) => {
-      const response = await GetTakeAttendanceReportByCourseandInsId(id, user.id);
+      const response = await GetTakeAttendanceReportByCourseandInsId(
+        id,
+        user.id
+      );
       setCourse(response);
     };
     const fetchDates = async (id: any) => {
@@ -47,7 +53,6 @@ function AttendaceReportDetail() {
     fetchCourse(params.id);
   }, [params.id]);
 
-
   const ExportFileExcel = () => {
     const tokenStorageService = new TokenStorageService();
     const user = tokenStorageService.getUser();
@@ -55,11 +60,10 @@ function AttendaceReportDetail() {
     console.log(params.id);
     console.log(user.id);
 
-    if(params.id && user.id){
-      GetStatisticsToExcel(parseInt(params.id),user.id);
+    if (params.id && user.id) {
+      GetStatisticsToExcel(parseInt(params.id), user.id);
     }
-
-  }
+  };
 
   return (
     <SidebarWithHeader role2="instructor">
@@ -72,11 +76,9 @@ function AttendaceReportDetail() {
               <Th>RollNumber</Th>
               <Th>FullName</Th>
               <Th>Course</Th>
-              <div>
-                {dates.map((date: Date) => (
-                  <Th>{date.date}</Th>
-                ))}
-              </div>
+              {dates.map((date: Date) => (
+                <Th>{date.date}</Th>
+              ))}
               <Th>Number of absents</Th>
               <Th>Percentage absent</Th>
             </Tr>
@@ -88,11 +90,9 @@ function AttendaceReportDetail() {
                 <Td>{course.rollNumber}</Td>
                 <Td>{course.studentName}</Td>
                 <Td>{course.courseName}</Td>
-                <Td>
-                  {course.attendances.map((attendance: AttendanceCourse) => (
-                    <Td>{getStatus(attendance.status)}</Td>
-                  ))}
-                </Td>
+                {course.attendances.map((attendance: AttendanceCourse) => (
+                  <Td>{getStatus(attendance.status)} </Td>
+                ))}
                 <Td>{course.summary}</Td>
                 <Td>{course.percentage}</Td>
               </Tr>

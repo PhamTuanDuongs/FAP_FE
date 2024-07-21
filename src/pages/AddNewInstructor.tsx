@@ -22,7 +22,7 @@ function AddNewInstructor() {
     dob: yup.string().required("Instructor date of birth is required"),
     email: yup.string().required("Email is required"),
     image: yup.string().required("Image is required"),
-    roleid: yup.string().required("Role is required")
+    roleid: yup.string().required("Role is required"),
   });
 
   const formik = useFormik({
@@ -36,7 +36,7 @@ function AddNewInstructor() {
       email: "",
       image: "",
       image2: "",
-      roleid: 2
+      roleid: 2,
     },
     validationSchema: validationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
@@ -49,8 +49,8 @@ function AddNewInstructor() {
         dob: values.dob,
         email: values.email,
         image: values.image,
-        roleId: values.roleid
-      }
+        roleId: values.roleid,
+      };
 
       console.log(newSubjectData);
 
@@ -61,8 +61,7 @@ function AddNewInstructor() {
             position: "bottom-right",
           });
 
-          navigate('/Instructors', { replace: true });
-
+          navigate("/Instructors", { replace: true });
         } else {
           toast.error(res.data, {
             position: "bottom-right",
@@ -77,41 +76,40 @@ function AddNewInstructor() {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      formik.setFieldValue('image2', file);
+      formik.setFieldValue("image2", file);
       setImageUrl(URL.createObjectURL(file));
 
       console.log(formik.values.instructorCode);
       console.log(file.type);
 
       let type: string = "";
-      let result: string =  formik.values.instructorCode + "." + file.type;
+      let result: string = formik.values.instructorCode + "." + file.type;
       let newResult: string = result.replace("image/jpeg", "");
 
-      if(file.type === "image/jpg"){
-        type = "jpg"
+      if (file.type === "image/jpg") {
+        type = "jpg";
         newResult = result.replace("image/jpeg", "");
       }
 
-      if(file.type === "image/jpeg"){
-        type = "jpg"
+      if (file.type === "image/jpeg") {
+        type = "jpg";
         newResult = result.replace("image/jpeg", type);
       }
 
-      if(file.type === "image/svg"){
-        type = "svg"
+      if (file.type === "image/svg") {
+        type = "svg";
         newResult = result.replace("image/svg", type);
       }
 
-      if(file.type === "image/png"){
+      if (file.type === "image/png") {
         type = "png";
         newResult = result.replace("image/png", type);
       }
 
-    formik.setFieldValue('image', newResult);
-    setImageFile(file);
+      formik.setFieldValue("image", newResult);
+      setImageFile(file);
+    }
   };
-  };
-
 
   return (
     <SidebarWithHeader role2="admin">
@@ -124,7 +122,10 @@ function AddNewInstructor() {
             value={formik.values.instructorCode}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={formik.touched.instructorCode && Boolean(formik.errors.instructorCode)}
+            isInvalid={
+              formik.touched.instructorCode &&
+              Boolean(formik.errors.instructorCode)
+            }
           ></Input>
           {formik.errors.instructorCode && (
             <Text color="red">{formik.errors.instructorCode}</Text>
@@ -136,7 +137,9 @@ function AddNewInstructor() {
             value={formik.values.username}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={formik.touched.username && Boolean(formik.errors.username)}
+            isInvalid={
+              formik.touched.username && Boolean(formik.errors.username)
+            }
           ></Input>
           {formik.errors.username && (
             <Text color="red">{formik.errors.username}</Text>
@@ -148,7 +151,9 @@ function AddNewInstructor() {
             value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={formik.touched.password && Boolean(formik.errors.password)}
+            isInvalid={
+              formik.touched.password && Boolean(formik.errors.password)
+            }
           ></Input>
           {formik.errors.password && (
             <Text color="red">{formik.errors.password}</Text>
@@ -162,9 +167,7 @@ function AddNewInstructor() {
             onBlur={formik.handleBlur}
             isInvalid={formik.touched.name && Boolean(formik.errors.name)}
           ></Input>
-          {formik.errors.name && (
-            <Text color="red">{formik.errors.name}</Text>
-          )}
+          {formik.errors.name && <Text color="red">{formik.errors.name}</Text>}
           <FormLabel>Address</FormLabel>
           <Input
             name="address"
@@ -187,9 +190,7 @@ function AddNewInstructor() {
             onBlur={formik.handleBlur}
             isInvalid={formik.touched.dob && Boolean(formik.errors.dob)}
           ></Input>
-          {formik.errors.dob && (
-            <Text color="red">{formik.errors.dob}</Text>
-          )}
+          {formik.errors.dob && <Text color="red">{formik.errors.dob}</Text>}
           <FormLabel>Email</FormLabel>
           <Input
             name="email"
@@ -224,15 +225,14 @@ function AddNewInstructor() {
             onBlur={formik.handleBlur}
             required
           ></input>
-          {imageUrl && (<img src={imageUrl} alt="" width="100px" />)}
+          {imageUrl && <img src={imageUrl} alt="" width="100px" />}
 
           <FormLabel>Role</FormLabel>
-          <Input
-            value="Instructor"
-            readOnly
-          ></Input>
-          
-          <Button marginTop='10px' type="submit">Add New Instructor</Button>
+          <Input value="Instructor" readOnly></Input>
+
+          <Button marginTop="10px" type="submit">
+            Add New Instructor
+          </Button>
         </form>
       </Container>
     </SidebarWithHeader>

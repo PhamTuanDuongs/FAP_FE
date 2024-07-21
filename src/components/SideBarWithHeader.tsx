@@ -231,6 +231,8 @@ interface MobileProps extends FlexProps {
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const user = new TokenStorageService();
+  const info = user.getUser() as any;
   return (
     <Flex
       alignItems="center"
@@ -293,9 +295,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
+                  <Text fontSize="sm">{info.Username}</Text>
                   <Text fontSize="xs" color="gray.600">
-                    Admin
+                    {info.role}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>

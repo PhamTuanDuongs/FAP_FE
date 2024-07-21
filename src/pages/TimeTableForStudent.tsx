@@ -84,7 +84,7 @@ function TimetableComponentForStudent() {
   };
 
   useEffect(() => {
-    setDaysInAWeek(getCurrentWeekday("ddMM"));
+    setDaysInAWeek(getDaysInWeek(currentWeek - 1, currentYear, "ddMM"));
     setWeeksInYear(getAllWeeks(getCurrentYear()));
     setYears(yearArr);
   }, []);
@@ -133,7 +133,7 @@ function TimetableComponentForStudent() {
               <option
                 key={date.weekNumber}
                 value={date.weekNumber + ":" + date.year}
-                selected={date.weekNumber === currentWeek}
+                selected={date.weekNumber === currentWeek - 1}
               >
                 {date.startDate}-{date.endDate}
               </option>
