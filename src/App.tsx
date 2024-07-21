@@ -21,6 +21,13 @@ import UpdateStudent from "./pages/UpdateStudent";
 import ViewInstructor from "./pages/ViewInstructor";
 import AddNewInstructor from "./pages/AddNewInstructor";
 import UpdateInstructor from "./pages/UpdateInstructor";
+import AttendanceList from "./pages/AttendanceList";
+import UpdateAttendance from "./pages/UpdateAttendance";
+import StudentAttendanceDetails from "./pages/StudentAttendanceDetails";
+import InstructorSchedule from "./pages/InstructorSchedule";
+
+
+
 function App() {
   return (
     <div>
@@ -65,6 +72,14 @@ function App() {
             </Route>
           </Route>
           <Route path="/Unauthorized" element={<Unauthorized />} />
+
+          <Route path="/AttendanceList/:scheduleId/:instructorId" element={<AttendanceList />} />
+          <Route path="/UpdateAttendance/:instructorId/:scheduleId" element={<UpdateAttendance />} />
+
+          <Route path="Student/details/:studentId" element={<StudentAttendanceDetails />} />
+
+          <Route path="/Instructor/Schedule/:instructorId" element={<InstructorSchedule />} />
+
         </Routes>
       </BrowserRouter>
     </div>
