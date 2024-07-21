@@ -51,7 +51,7 @@ function AttendaceReportDetail() {
     };
     fetchDates(params.id);
     fetchCourse(params.id);
-  }, [params.id]);
+  }, []);
 
   const ExportFileExcel = () => {
     const tokenStorageService = new TokenStorageService();

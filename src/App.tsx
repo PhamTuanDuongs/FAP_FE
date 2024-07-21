@@ -21,6 +21,11 @@ import UpdateStudent from "./pages/UpdateStudent";
 import ViewInstructor from "./pages/ViewInstructor";
 import AddNewInstructor from "./pages/AddNewInstructor";
 import UpdateInstructor from "./pages/UpdateInstructor";
+import AttendanceList from "./pages/AttendanceList";
+import UpdateAttendance from "./pages/UpdateAttendance";
+import StudentAttendanceDetails from "./pages/StudentAttendanceDetails";
+import InstructorSchedule from "./pages/InstructorSchedule";
+
 function App() {
   return (
     <div>
@@ -32,6 +37,10 @@ function App() {
               <Route
                 path="/Student/Report/ScheduleOfWeek"
                 element={<TimetableComponentForStudent />}
+              />
+              <Route
+                path="/Student/details"
+                element={<StudentAttendanceDetails />}
               />
             </Route>
             <Route element={<IsAuthorized role="Admin" />}>
@@ -54,6 +63,16 @@ function App() {
               <Route
                 path="/Teacher/Report/ScheduleOfWeek"
                 element={<TimetableComponentForTeacher />}
+              />
+              <Route path="/takeAttendance" element={<InstructorSchedule />} />
+
+              <Route
+                path="/AttendanceList/:scheduleId/:instructorId"
+                element={<AttendanceList />}
+              />
+              <Route
+                path="/UpdateAttendance/:instructorId/:scheduleId"
+                element={<UpdateAttendance />}
               />
               <Route path="/Course/:id" element={<AttendaceReportDetail />} />
               <Route path="/Courses" element={<ViewCourses />} />

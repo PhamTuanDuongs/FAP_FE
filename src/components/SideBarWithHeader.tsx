@@ -62,7 +62,7 @@ const LinkItems: Array<LinkItemProps> = [
     name: "Take Attendance",
     icon: FiCheckCircle,
     url: "/takeAttendance",
-    roles: ["instructor, admin"],
+    roles: ["instructor"],
   },
   {
     name: "Attendance Report",
@@ -70,7 +70,12 @@ const LinkItems: Array<LinkItemProps> = [
     url: "/Student/Report/Attendance",
     roles: ["instructor"],
   },
-
+  {
+    name: "Attendance Report",
+    icon: FiUserCheck,
+    url: "/Student/details",
+    roles: ["student"],
+  },
   {
     name: "Create a new Course",
     icon: FiPlusCircle,
