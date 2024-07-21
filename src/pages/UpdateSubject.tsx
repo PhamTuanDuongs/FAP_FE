@@ -84,6 +84,7 @@ function UpdateSubject() {
           <Input readOnly defaultValue={params.id}></Input>
           <FormLabel>Subject Code</FormLabel>
           <Input
+            readOnly
             name="code"
             id="code"
             value={formik.values.code}

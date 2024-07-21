@@ -230,6 +230,7 @@ function UpdateInstructor() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             isInvalid={formik.touched.email && Boolean(formik.errors.email)}
+            readOnly
           ></Input>
           {formik.errors.email && (
             <Text color="red">{formik.errors.email}</Text>

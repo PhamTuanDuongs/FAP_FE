@@ -53,8 +53,7 @@ function ViewStudent() {
         toast.success(res.data, {
           position: "bottom-right",
         });
-
-        setIsLoaded(false);
+        setStudents(students.filter((student) => student.id !== subject.id));
       } else {
         toast.error(res.data, {
           position: "bottom-right",
