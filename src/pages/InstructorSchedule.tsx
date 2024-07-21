@@ -82,7 +82,7 @@ const InstructorSchedule: React.FC = () => {
   }, []);
 
   const handleTakeAttendance = (scheduleId: number) => {
-    navigate(`/takeAttendance`);
+    navigate(`/AttendanceList/${scheduleId}`);
   };
 
   if (loading) return <Text>Loading...</Text>;
@@ -127,7 +127,7 @@ const InstructorSchedule: React.FC = () => {
                       colorScheme="blue"
                       onClick={() =>
                         navigate(
-                          `/AttendanceList/${schedule.id}/${token.getUser().id}`
+                          `/UpdateAttendance/${token.getUser().id}/${schedule.id}`
                         )
                       }
                     >

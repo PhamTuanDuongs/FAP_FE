@@ -18,16 +18,17 @@ import { format, parseISO } from "date-fns";
 import { GetAttendancesByScheduleAPI } from "../services/Attendance";
 import { AttendanceResponse } from "../types/Attandance";
 import SidebarWithHeader from "../components/SideBarWithHeader";
+import TokenStorageService from "../services/TokenStorage";
 
 const AttendanceList: React.FC = () => {
-  const { scheduleId, instructorId } = useParams<{
+  const { scheduleId } = useParams<{
     scheduleId: string;
-    instructorId: string;
   }>();
   const [data, setData] = useState<AttendanceResponse[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  var TokenStorage = new TokenStorageService();
 
   useEffect(() => {
     const fetchAttendances = async () => {
@@ -35,7 +36,7 @@ const AttendanceList: React.FC = () => {
         const attendances: AttendanceResponse[] =
           await GetAttendancesByScheduleAPI(
             Number(scheduleId),
-            Number(instructorId)
+            Number(TokenStorage.getUser().id)
           );
         console.log("Fetched Attendances:", attendances);
         setData(attendances);
@@ -48,7 +49,7 @@ const AttendanceList: React.FC = () => {
     };
 
     fetchAttendances();
-  }, [scheduleId, instructorId]);
+  }, [scheduleId]);
 
   if (loading) return <Spinner size="xl" />;
   if (error)
@@ -88,7 +89,7 @@ const AttendanceList: React.FC = () => {
                 <Td>{item.studentName || "N/A"}</Td>
                 <Td>{item.roleNumber || "N/A"}</Td>
                 <Td color={item.status === 1 ? "green.500" : "red.500"}>
-                  {item.status === 1 ? "Present" : "Absent"}
+                  Not yet
                 </Td>
               </Tr>
             ))}
@@ -99,7 +100,7 @@ const AttendanceList: React.FC = () => {
           colorScheme="blue"
           mt={4}
           onClick={() =>
-            navigate(`/UpdateAttendance/${instructorId}/${scheduleId}`)
+            navigate(`/UpdateAttendance/${TokenStorage.getUser().id}/${scheduleId}`)
           }
         >
           Edit Attendance

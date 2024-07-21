@@ -46,6 +46,7 @@ function AttendaceReportDetail() {
       setCourse(response);
     };
     const fetchDates = async (id: any) => {
+      console.log(id);
       const responsedate = await GetDatesByCourseInstructor(id, user.id);
       setDates(responsedate);
     };

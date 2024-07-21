@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 
 interface InstructorLine {
   data: Instructor;
+  index: number;
 }
 
 function ViewInstructor() {
@@ -25,10 +26,10 @@ function ViewInstructor() {
       fetchStudents();
   }, [isLoaded]);
 
-  const NewSubjectLine: React.FC<InstructorLine> = ({ data }) => {
+  const NewSubjectLine: React.FC<InstructorLine> = ({ data, index }) => {
     return (
       <Tr>
-        <Td>{data.id}</Td>
+        <Td>{index}</Td>
         <Td>{data.instructorCode}</Td>
         <Td>{data.name}</Td>
         <Td>{data.email}</Td>
@@ -86,7 +87,7 @@ function ViewInstructor() {
             {
               students.length > 0 ? (
                 <>
-                  {students.map((subject) => <NewSubjectLine key={subject.id} data={subject}></NewSubjectLine>)}
+                  {students.map((subject,index) => <NewSubjectLine index={index +1} key={subject.id} data={subject}></NewSubjectLine>)}
                 </>
               ) : (
                 <Tr>

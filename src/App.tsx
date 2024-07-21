@@ -31,8 +31,8 @@ function App() {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Login />} />
           <Route element={<IsLogin />}>
+          
             <Route element={<IsAuthorized role="Student" />}>
               <Route
                 path="/Student/Report/ScheduleOfWeek"
@@ -43,6 +43,7 @@ function App() {
                 element={<StudentAttendanceDetails />}
               />
             </Route>
+
             <Route element={<IsAuthorized role="Admin" />}>
               <Route path="/Subjects" element={<SubjectList />} />
               <Route path="/Update/Subject/:id" element={<UpdateSubject />} />
@@ -59,6 +60,7 @@ function App() {
               />
               <Route path="/Add/Course" element={<AddNewCourse />} />
             </Route>
+
             <Route element={<IsAuthorized role="Teacher" />}>
               <Route
                 path="/Teacher/Report/ScheduleOfWeek"
@@ -67,23 +69,27 @@ function App() {
               <Route path="/takeAttendance" element={<InstructorSchedule />} />
 
               <Route
-                path="/AttendanceList/:scheduleId/:instructorId"
+                path="/AttendanceList/:scheduleId"
                 element={<AttendanceList />}
               />
               <Route
-                path="/UpdateAttendance/:instructorId/:scheduleId"
+                path="/UpdateAttendance/:userId/:scheduleId"
                 element={<UpdateAttendance />}
               />
               <Route path="/Course/:id" element={<AttendaceReportDetail />} />
+
               <Route path="/Courses" element={<ViewCourses />} />
-              <Route path="/takeAttendance" element={<TakeAttendance />} />
               <Route
                 path="/Student/Report/Attendance"
                 element={<AttendaceReport />}
               />
             </Route>
+            
           </Route>
+
+          <Route path=""  element={<Login />} />
           <Route path="/Unauthorized" element={<Unauthorized />} />
+
         </Routes>
       </BrowserRouter>
     </div>

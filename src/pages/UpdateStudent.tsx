@@ -25,6 +25,15 @@ function UpdateStudent() {
     dob: yup.string().required("Student date of birth is required"),
     email: yup.string().required("Email is required"),
     image: yup.string().required("Image is required"),
+    image2: yup
+   .mixed()
+   .required("File is required")
+   .test("required", "Invalid file type. Only jpg,png", (value: any) => {
+      if (!value ||!value.length) return true;
+      const file = value[0];
+      if (!file) return true;
+      return ["image/jpeg", "image/jpg", "image/png"].includes(file.type);
+    }),
   });
 
 
@@ -38,7 +47,7 @@ function UpdateStudent() {
       dob: "",
       email: "",
       image: "",
-      image2: "",
+      image2: [],
       roleid: 1
     },
     validationSchema: validationSchema,
@@ -100,7 +109,7 @@ function UpdateStudent() {
         dob: response.dob ? response.dob.slice(0, 10) : '',
         email: response.email,
         image: response.image,
-        image2: "",
+        image2: [],
         roleid: response.roleid
       });
     };
@@ -113,7 +122,6 @@ function UpdateStudent() {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      formik.setFieldValue('image2', file);
       setImageUrl(URL.createObjectURL(file));
 
       let type: string = "";
@@ -141,6 +149,7 @@ function UpdateStudent() {
         }
 
       formik.setFieldValue('image', newResult);
+      formik.setFieldValue("image2", event.target.files);
       setImageFile(file);
     };
   };
@@ -246,22 +255,21 @@ function UpdateStudent() {
             value={formik.values.image}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            isInvalid={formik.touched.image && Boolean(formik.errors.image)}
             readOnly
           ></Input>
-          {formik.errors.image && (
-            <Text color="red">{formik.errors.image}</Text>
-          )}
 
-          <input
+          <Input
             name="image2"
             id="image2"
             type="file"
             onChange={handleImageChange}
             onBlur={formik.handleBlur}
-          ></input>
+          ></Input>
           {imageUrl && (
             <img src={imageUrl} alt="" width="100px" />
+          )}
+          {formik.errors.image2 && (
+            <Text color="red">{formik.errors.image2}</Text>
           )}
 
           <Button marginTop="10px" type="submit">

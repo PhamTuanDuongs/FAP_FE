@@ -13,7 +13,6 @@ import {
   FormLabel,
   Checkbox,
   Input,
-  useToast,
 } from "@chakra-ui/react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -22,27 +21,28 @@ import {
 } from "../services/Attendance";
 import { AttendanceResponse, AttendanceRequest } from "../types/Attandance";
 import SidebarWithHeader from "../components/SideBarWithHeader";
+import TokenStorageService from "../services/TokenStorage";
+import { toast } from "react-toastify";
 
 const UpdateAttendance: React.FC = () => {
-  const { instructorId, scheduleId } = useParams<{
-    instructorId: string;
+  const { scheduleId } = useParams<{
     scheduleId: string;
   }>();
   const navigate = useNavigate(); // Sử dụng useNavigate để điều hướng
-  const toast = useToast(); // Sử dụng useToast để hiển thị thông báo
   const [students, setStudents] = useState<AttendanceResponse[]>([]);
   const [statusMap, setStatusMap] = useState<Map<number, number>>(new Map());
   const [commentMap, setCommentMap] = useState<Map<number, string>>(new Map());
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  var Token = new TokenStorageService();
 
   useEffect(() => {
-    if (scheduleId && instructorId) {
+    if (scheduleId && Token.getUser().id) {
       const fetchStudents = async () => {
         try {
           const result = await GetAttendancesByScheduleAPI(
             Number(scheduleId),
-            Number(instructorId)
+            Number(Token.getUser().id)
           );
           setStudents(result);
           const initialStatusMap = new Map<number, number>();
@@ -62,7 +62,7 @@ const UpdateAttendance: React.FC = () => {
 
       fetchStudents();
     }
-  }, [scheduleId, instructorId]);
+  }, [scheduleId]);
 
   const handleStatusChange = (studentId: number, status: number) => {
     setStatusMap((prev) => new Map(prev).set(studentId, status));
@@ -86,25 +86,15 @@ const UpdateAttendance: React.FC = () => {
     }));
 
     try {
-      await UpdateAttendancesAsync(Number(instructorId), attendanceRequests);
-      setSuccess("Attendance records updated successfully.");
-      setError(null);
-      toast({
-        title: "Update Successful",
-        description: "Attendance records have been updated successfully.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
+      await UpdateAttendancesAsync(Number(Token.getUser().id), attendanceRequests);
+      toast.success("Update records successfully !", {
+        position: "bottom-right",
       });
     } catch (err) {
       setError("Error updating attendance.");
       setSuccess(null);
-      toast({
-        title: "Update Failed",
-        description: "There was an error updating the attendance records.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+      toast.success("There was an error updating the attendance records.", {
+        position: "bottom-right",
       });
     }
   };
@@ -113,7 +103,6 @@ const UpdateAttendance: React.FC = () => {
     <SidebarWithHeader role2="instructor">
       <Box p={4}>
         <Text fontSize="2xl" mb={4}>
-          Update Attendance
         </Text>
         {success && <Text color="green.500">{success}</Text>}
         {error && <Text color="red.500">{error}</Text>}

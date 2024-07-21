@@ -8,6 +8,7 @@ import { DeleteStudentAPI, GetAllStudents, GetStudentInfoFile } from "../service
 
 interface StudentLine {
   data: Student;
+  index: number;
 }
 
 function ViewStudent() {
@@ -25,10 +26,10 @@ function ViewStudent() {
     fetchStudents();
   }, [isLoaded]);
 
-  const NewSubjectLine: React.FC<StudentLine> = ({ data }) => {
+  const NewSubjectLine: React.FC<StudentLine> = ({ data , index }) => {
     return (
       <Tr>
-        <Td>{data.id}</Td>
+        <Td>{index}</Td>
         <Td>{data.roleNumber}</Td>
         <Td>{data.name}</Td>
         <Td>{data.email}</Td>
@@ -81,7 +82,7 @@ function ViewStudent() {
         <Table>
           <Thead>
             <Tr>
-              <Th>StudentId</Th>
+              <Th>No</Th>
               <Th>RoleNumber</Th>
               <Th>Name</Th>
               <Th>Email</Th>
@@ -92,7 +93,7 @@ function ViewStudent() {
             {
               students.length > 0 ? (
                 <>
-                  {students.map((subject) => <NewSubjectLine key={subject.id} data={subject}></NewSubjectLine>)}
+                  {students.map((subject,index) => <NewSubjectLine index={index + 1} key={subject.id} data={subject}></NewSubjectLine>)}
                 </>
               ) : (
                 <Tr>
