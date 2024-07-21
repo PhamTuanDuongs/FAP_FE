@@ -26,8 +26,6 @@ import UpdateAttendance from "./pages/UpdateAttendance";
 import StudentAttendanceDetails from "./pages/StudentAttendanceDetails";
 import InstructorSchedule from "./pages/InstructorSchedule";
 
-
-
 function App() {
   return (
     <div>
@@ -39,6 +37,10 @@ function App() {
               <Route
                 path="/Student/Report/ScheduleOfWeek"
                 element={<TimetableComponentForStudent />}
+              />
+              <Route
+                path="/Student/details"
+                element={<StudentAttendanceDetails />}
               />
             </Route>
             <Route element={<IsAuthorized role="Admin" />}>
@@ -62,6 +64,16 @@ function App() {
                 path="/Teacher/Report/ScheduleOfWeek"
                 element={<TimetableComponentForTeacher />}
               />
+              <Route path="/takeAttendance" element={<InstructorSchedule />} />
+
+              <Route
+                path="/AttendanceList/:scheduleId/:instructorId"
+                element={<AttendanceList />}
+              />
+              <Route
+                path="/UpdateAttendance/:instructorId/:scheduleId"
+                element={<UpdateAttendance />}
+              />
               <Route path="/Course/:id" element={<AttendaceReportDetail />} />
               <Route path="/Courses" element={<ViewCourses />} />
               <Route path="/takeAttendance" element={<TakeAttendance />} />
@@ -72,14 +84,6 @@ function App() {
             </Route>
           </Route>
           <Route path="/Unauthorized" element={<Unauthorized />} />
-
-          <Route path="/AttendanceList/:scheduleId/:instructorId" element={<AttendanceList />} />
-          <Route path="/UpdateAttendance/:instructorId/:scheduleId" element={<UpdateAttendance />} />
-
-          <Route path="Student/details/:studentId" element={<StudentAttendanceDetails />} />
-
-          <Route path="/Instructor/Schedule/:instructorId" element={<InstructorSchedule />} />
-
         </Routes>
       </BrowserRouter>
     </div>

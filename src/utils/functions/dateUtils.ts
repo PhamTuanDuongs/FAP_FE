@@ -140,7 +140,7 @@ export function getCurrentWeek(): number {
 export function getCurrentWeekday(
   formatdate: string
 ): Array<{ day: string; date: string }> {
-  return getDaysInWeek(getCurrentWeek(), getCurrentYear(), formatdate);
+  return getDaysInWeek(getCurrentWeek() - 1, getCurrentYear(), formatdate);
 }
 
 export const yearArr: number[] = [2021, 2022, 2023, 2024];
