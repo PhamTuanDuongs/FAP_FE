@@ -24,11 +24,11 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { useTable, usePagination, Column } from "react-table";
-import { ListCourses } from "../types/Course";
+import { Course } from "../types/Course";
 
 interface CustomTableProps {
   columns: string[];
-  data: ListCourses[];
+  data: Course[];
 }
 
 const CustomTable: React.FC<CustomTableProps> = ({ columns, data }) => {
@@ -36,7 +36,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ columns, data }) => {
     () =>
       columns.map((col) => ({
         Header: col,
-        accessor: (row: ListCourses) => row[col as keyof ListCourses],
+        accessor: (row: Course) => row[col as keyof Course],
       })),
     [columns]
   );

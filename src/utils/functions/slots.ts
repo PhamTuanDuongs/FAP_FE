@@ -14,8 +14,8 @@ export interface Slot {
   time: string;
 }
 export const slots: Slot[] = [
-  { id: 1, time: "07:30-9h50" },
-  { id: 2, time: "10:00-12h50" },
+  { id: 1, time: "07:30-09:50" },
+  { id: 2, time: "10:00-12:50" },
   { id: 3, time: "12:50-15:10" },
   { id: 4, time: "15:20-17:40" },
 ];

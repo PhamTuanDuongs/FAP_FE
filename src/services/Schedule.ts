@@ -1,6 +1,3 @@
-import { Attendance, Schedule } from "../types/Attandance";
-import { Course } from "../types/Course";
-
 const PREFIX_URL = process.env.REACT_APP_SERVER_API + "/TimeTable";
 export async function GetschedulesForStudent(
   id: number,
@@ -45,5 +42,32 @@ export async function GetschedulesForInstructor(
     return data;
   } catch (err) {
     console.log(err);
+  }
+}
+
+export async function GetDatesByCourseInstructor(
+  courseId: number,
+  instructorId: number
+) {
+  try {
+    const res = await fetch(
+      `${
+        PREFIX_URL +
+        "/GetDatesByCourseInstructor?courseId=" +
+        courseId +
+        "&id=" +
+        instructorId
+      }`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    throw err;
   }
 }

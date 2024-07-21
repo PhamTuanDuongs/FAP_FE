@@ -36,52 +36,88 @@ import {
 import { IconType } from "react-icons";
 import { ReactText } from "react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import TokenStorageService from "../services/TokenStorage";
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
   url: string;
+  roles: string[];
 }
 const LinkItems: Array<LinkItemProps> = [
   {
     name: "Weekly Timetable",
     icon: FiCalendar,
     url: "/Student/Report/ScheduleOfWeek ",
+    roles: ["student"],
+  },
+
+  {
+    name: "Weekly Timetable",
+    icon: FiCalendar,
+    url: "/Teacher/Report/ScheduleOfWeek ",
+    roles: ["instructor"],
   },
   {
     name: "Take Attendance",
     icon: FiCheckCircle,
     url: "/takeAttendance",
+    roles: ["instructor, admin"],
   },
   {
     name: "Attendance Report",
     icon: FiUserCheck,
     url: "/Student/Report/Attendance",
+    roles: ["instructor"],
   },
 
   {
     name: "Create a new Course",
     icon: FiPlusCircle,
     url: "/Add/Course",
+    roles: ["admin"],
   },
 
   {
     name: "View List of Courses",
     icon: FiPlusCircle,
     url: "/Courses",
+    roles: ["admin"],
+  },
+
+  {
+    name: "Subjects",
+    icon: FiPlusCircle,
+    url: "/Subjects",
+    roles: ["admin"],
+  },
+  {
+    name: "Students",
+    icon: FiPlusCircle,
+    url: "/Students",
+    roles: ["admin"],
+  },
+  {
+    name: "Instructors",
+    icon: FiPlusCircle,
+    url: "/Instructors",
+    roles: ["admin"],
   },
 ];
 
 export default function SidebarWithHeader({
   children,
+  role2,
 }: {
   children: ReactNode;
+  role2: string;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box minH="100vh" display="flex" flexDirection="column">
       <Box flex="1">
         <SidebarContent
+          role={role2}
           onClose={() => onClose}
           display={{ base: "none", md: "block" }}
         />
@@ -95,7 +131,7 @@ export default function SidebarWithHeader({
           size="full"
         >
           <DrawerContent>
-            <SidebarContent onClose={onClose} />
+            <SidebarContent onClose={onClose} role="" />
           </DrawerContent>
         </Drawer>
         <MobileNav onOpen={onOpen} />
@@ -121,9 +157,10 @@ export default function SidebarWithHeader({
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
+  role: string;
 }
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({ onClose, role, ...rest }: SidebarProps) => {
   return (
     <Box
       marginTop="50px"
@@ -138,7 +175,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       {...rest}
     >
       <Box marginTop={10}>
-        {LinkItems.map((link) => (
+        {LinkItems.filter((link) => link.roles.includes(role)).map((link) => (
           <NavItem key={link.name} icon={link.icon} link={link.url}>
             {link.name}
           </NavItem>
@@ -194,6 +231,8 @@ interface MobileProps extends FlexProps {
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const { colorMode, toggleColorMode } = useColorMode();
+  const user = new TokenStorageService();
+  const info = user.getUser() as any;
   return (
     <Flex
       alignItems="center"
@@ -256,9 +295,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
+                  <Text fontSize="sm">{info.Username}</Text>
                   <Text fontSize="xs" color="gray.600">
-                    Admin
+                    {info.role}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
@@ -273,7 +312,15 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  const tokenStorageService = new TokenStorageService();
+                  tokenStorageService.signOut();
+                  window.location.reload();
+                }}
+              >
+                Sign out
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>

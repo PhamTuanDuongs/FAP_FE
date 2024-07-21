@@ -27,7 +27,7 @@ export interface Schedule {
 export interface Attendance {
   studentId: number;
   scheduleId: number;
-  dateAttended?: string;
+  dateAttended: string;
   status: number;
   comment?: string;
   scheduleDTONav: Schedule;

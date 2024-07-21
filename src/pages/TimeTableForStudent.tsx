@@ -1,8 +1,12 @@
 import {
+  Box,
+  Flex,
+  Select,
   Table,
   TableContainer,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -14,6 +18,7 @@ import { GetschedulesForStudent } from "../services/Schedule";
 import { Slot, slots } from "../utils/functions/slots";
 import {
   getAllWeeks,
+  getCurrentDateFormatted,
   getCurrentWeek,
   getCurrentWeekday,
   getCurrentYear,
@@ -21,6 +26,8 @@ import {
   yearArr,
 } from "../utils/functions/dateUtils";
 import { Day, Week } from "../types/date";
+import Dialog from "../components/Dialog";
+import TokenStorageService from "../services/TokenStorage";
 
 function TimetableComponentForStudent() {
   const [schedules, setSchedules] = useState<Attendance[]>([]);
@@ -29,6 +36,7 @@ function TimetableComponentForStudent() {
   const [weeksInYear, setWeeksInYear] = useState<Week[]>([]);
   const [currentWeek, setCurrentWeek] = useState<number>(getCurrentWeek());
   const [currentYear, setCurrentYear] = useState<number>(getCurrentYear());
+
   const [dateFrom, setDateFrom] = useState<string>(
     getCurrentWeekday("MMddYYY")[0].date
   );
@@ -36,15 +44,7 @@ function TimetableComponentForStudent() {
     getCurrentWeekday("MMddYYY")[6].date
   );
   console.log(weeksInYear);
-  const checkStatus = (status: number) => {
-    if (status === 0) {
-      return "NOTYET";
-    } else if (status === 1) {
-      return "ATTENDED";
-    } else if (status === 2) {
-      return "ABSENT";
-    }
-  };
+
   const handelGetDaysInAWeek = (value: string) => {
     if (value !== undefined || value != null) {
       const resultSplit = value.split(":");
@@ -82,88 +82,106 @@ function TimetableComponentForStudent() {
       setCurrentYear(getCurrentYear());
     }
   };
+
   useEffect(() => {
-    setDaysInAWeek(getCurrentWeekday("ddMM"));
+    setDaysInAWeek(getDaysInWeek(currentWeek - 1, currentYear, "ddMM"));
     setWeeksInYear(getAllWeeks(getCurrentYear()));
     setYears(yearArr);
   }, []);
 
   useEffect(() => {
+    const tokenStorageService = new TokenStorageService();
+    const user = tokenStorageService.getUser();
+
     const fetchSchedules = async () => {
-      const response = await GetschedulesForStudent(1, dateFrom, dateTo);
+      const response = await GetschedulesForStudent(user.id, dateFrom, dateTo);
       setSchedules(response);
     };
 
     fetchSchedules();
   }, [dateFrom, dateTo]);
 
-  // response.then((res: Attendance[]) => setSchedules(res));
   return (
-    <SidebarWithHeader>
-      <h3>Schedule of Week</h3>
-      <label htmlFor="year">Year</label>
-      <select
-        id="year"
-        onChange={(e) => handleGetAllWeeksInYear(parseInt(e.target.value))}
-      >
-        {years.map((year: number) => (
-          <option value={year} selected={year === currentYear}>
-            {year}
-          </option>
-        ))}
-      </select>
-      <br />
-      <label htmlFor="weeks">Week</label>
-      <select id="weeks" onChange={(e) => handelGetDaysInAWeek(e.target.value)}>
-        {weeksInYear.map((date: Week) => (
-          <option
-            key={date.weekNumber}
-            value={date.weekNumber + ":" + date.year}
-            selected={date.weekNumber === currentWeek}
+    <SidebarWithHeader role2="student">
+      <Box marginBottom="10">
+        <Text fontSize="20" fontWeight="bold">
+          Schedule of Week
+        </Text>
+      </Box>
+      <Box>
+        <Flex justifyContent="flex-start" gap="550">
+          <Select
+            width={150}
+            name="year"
+            aria-label="year"
+            id="year"
+            onChange={(e) => handleGetAllWeeksInYear(parseInt(e.target.value))}
           >
-            {date.startDate}-{date.endDate}
-          </option>
-        ))}
-      </select>
-      <TableContainer>
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>Slot</Th>
-              {days.map((day: Day) => (
-                <Th>
-                  {day.day}-{day.date}
-                </Th>
-              ))}
-            </Tr>
-          </Thead>
-          <Tbody>
-            {slots.map((slot: Slot) => (
+            {years.map((year: number) => (
+              <option value={year} selected={year === currentYear}>
+                Year - {year}
+              </option>
+            ))}
+          </Select>
+          <Select
+            width={150}
+            aria-label="weeks"
+            id="weeks"
+            onChange={(e) => handelGetDaysInAWeek(e.target.value)}
+          >
+            {weeksInYear.map((date: Week) => (
+              <option
+                key={date.weekNumber}
+                value={date.weekNumber + ":" + date.year}
+                selected={date.weekNumber === currentWeek - 1}
+              >
+                {date.startDate}-{date.endDate}
+              </option>
+            ))}
+          </Select>
+        </Flex>
+        <TableContainer>
+          <Table>
+            <Thead>
               <Tr>
-                <Td>
-                  Slot {slot.id}-{slot.time}
-                </Td>
-                {days.map((value) => (
-                  <Td>
-                    {schedules.map(
-                      (schedule) =>
-                        schedule.scheduleDTONav.slot === slot.id &&
-                        schedule.scheduleDTONav.date === value.date && (
-                          <div>
-                            <div>{schedule.scheduleDTONav.instructorCode}</div>
-                            <div>{schedule.scheduleDTONav.course.code}</div>
-                            <div>at{schedule.scheduleDTONav.room}</div>
-                            {checkStatus(schedule.status)}
-                          </div>
-                        )
-                    )}
-                  </Td>
+                <Th fontWeight="extrabold">Slot</Th>
+                {days.map((day: Day) => (
+                  <Th
+                    fontWeight="extrabold"
+                    color={
+                      getCurrentDateFormatted() === day.date ? "red" : "black"
+                    }
+                  >
+                    {day.day}-{day.date}
+                  </Th>
                 ))}
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+            </Thead>
+            <Tbody>
+              {slots.map((slot: Slot) => (
+                <Tr>
+                  <Td>
+                    Slot {slot.id}-{slot.time}
+                  </Td>
+                  {days.map((value) => (
+                    <Td>
+                      {schedules.map(
+                        (schedule) =>
+                          schedule.scheduleDTONav.slot === slot.id &&
+                          schedule.scheduleDTONav.date === value.date && (
+                            <div>
+                              <Dialog schedule={schedule} />
+                            </div>
+                          )
+                      )}
+                    </Td>
+                  ))}
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Box>
     </SidebarWithHeader>
   );
 }
